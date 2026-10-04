@@ -214,8 +214,12 @@ const highlights = [
             const d = item.data.date;
             return (
               <a href={asset(`/nieuws/${item.id}`)} class="group card card-hover bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:border-primary/30">
-                {item.data.image && (
+                {item.data.image ? (
                   <img src={asset(item.data.image)} alt="" loading="lazy" decoding="async" class="h-44 w-full object-cover object-top" />
+                ) : (
+                  <div class="h-44 bg-primary-dark flex items-center justify-center" aria-hidden="true">
+                    <span class="font-heading font-black text-5xl tracking-wide text-sein">NHMD</span>
+                  </div>
                 )}
                 <div class="card__body p-6">
                   <time datetime={d.toISOString().slice(0, 10)} class="text-xs uppercase tracking-wide text-gray-500">
