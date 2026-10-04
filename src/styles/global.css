@@ -396,6 +396,17 @@ body {
   .standee--large .standee__slot { width: 17rem; }
 }
 
+/* Flat: no tilt, centred in the column, sized to be read in place. */
+.standee--flat {
+  justify-content: center;
+  perspective: none;
+}
+
+.standee--flat .standee__slot {
+  width: min(100%, 22rem);
+  transform: none;
+}
+
 .standee__slot + .standee__slot {
   margin-left: -3.75rem;
   z-index: 2;

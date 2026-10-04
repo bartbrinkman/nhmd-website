@@ -2,7 +2,10 @@
 import Page from '../layouts/Page.astro';
 import { asset } from '../utils';
 
-const maps = 'https://www.google.com/maps/search/?api=1&query=Robonsbosweg+11+1816+MK+Alkmaar';
+const address = 'Robonsbosweg 11, 1816 MK Alkmaar';
+const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+// Keyless embed, at the zoom the old site's map used.
+const mapsEmbed = `https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s${encodeURIComponent(`OSG Willem Blaeu, ${address}`)}!6i15`;
 ---
 
 <Page
@@ -38,7 +41,18 @@ const maps = 'https://www.google.com/maps/search/?api=1&query=Robonsbosweg+11+18
     Robonsbosweg 11<br />
     1816 MK Alkmaar
   </p>
-  <p><a href={maps} target="_blank" rel="noopener">Bekijk op de kaart</a></p>
+  <div class="not-prose my-6">
+    <div class="relative aspect-[4/3] sm:aspect-video overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <iframe
+        class="absolute inset-0 h-full w-full"
+        src={mapsEmbed}
+        title="Kaart: OSG Willem Blaeu, Robonsbosweg 11, Alkmaar"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <p class="mt-2 text-sm"><a href={maps} target="_blank" rel="noopener" class="text-primary-light font-medium">Open in Google Maps</a></p>
+  </div>
 
   <h2>Met de auto</h2>
   <p>
@@ -72,6 +86,13 @@ const maps = 'https://www.google.com/maps/search/?api=1&query=Robonsbosweg+11+18
 
   <h2>Nieuw in de hobby?</h2>
   <p>
-    Geen voorkennis nodig: de bouwers vertellen graag over hun banen.
+    Voorkennis is niet nodig. Kom gewoon genieten van de banen en doe
+    inspiratie op, of u nu zelf bouwt of alleen graag treinen ziet rijden.
+  </p>
+  <p>
+    Krijgt u de smaak te pakken? Op de grote
+    <a href={asset('/exposanten/treinenbeurs')}>treinenbeurs</a> vindt u alles
+    om zelf te beginnen, van een eerste startset tot rails, gebouwen en
+    figuurtjes. En de handelaren denken graag met u mee.
   </p>
 </Page>

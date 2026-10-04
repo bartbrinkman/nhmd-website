@@ -18,7 +18,16 @@ const nieuws = (await getCollection('nieuws', ({ data }) => !data.draft))
 
 // A taste of the most recent edition; the rest is on the galerij page.
 const [latestYear] = Object.keys(carousels).filter(k => /^\d{4}$/.test(k)).sort().reverse();
-const preview = (carousels as Record<string, { src: string; title: string; description?: string }[]>)[latestYear].slice(0, 10);
+// The video summary leads, as the feature tile.
+const preview = [
+  {
+    src: 'https://i.ytimg.com/vi/D7ZIT3VBDrc/maxresdefault.jpg',
+    title: 'Samenvatting NMD Dagen 2025',
+    description: 'Video',
+    video: 'D7ZIT3VBDrc',
+  },
+  ...(carousels as Record<string, { src: string; title: string; description?: string }[]>)[latestYear].slice(0, 9),
+];
 
 // Hero slideshow. Each source is pre-cropped to a 2.4:1 band, so the markup
 // needs no per-image framing.
@@ -35,17 +44,17 @@ const LOOP_SECONDS = heroSlides.length * SLIDE_SECONDS;
 const highlights = [
   {
     title: 'Ruim 150 meter modelspoor',
-    text: 'Banen in H0, N en meer, van stoomtram tot bergbaan, gebouwd door clubs uit de regio.',
+    text: 'Banen van clubs uit de regio en gastbanen, in H0, N en meer, van stoomtram tot bergbaan.',
     icon: 'M4 19h16M6 15l2-10h8l2 10M9 9h6M8 19v-4m8 4v-4',
   },
   {
     title: 'Grote treinenbeurs',
-    text: 'Kramen vol locomotieven, rijtuigen, gebouwen en onderdelen. Voor die ene loc die u nog zocht.',
+    text: 'Kramen vol locomotieven, wagens, gebouwen en onderdelen. Voor die ene loc die u nog zocht, of een eerste stap in de hobby.',
     icon: 'M3 7h18l-1.5 9a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Zm4 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2',
   },
   {
     title: 'Kinderbaan',
-    text: 'Op de kinderbaan van de Westfriese Modelspoor Club zetten kinderen hun eerste digitale stappen.',
+    text: 'Op de kinderbaan van de Westfriese Modelspoor Club besturen kinderen hun eerste modeltrein.',
     icon: 'M4 17h16M6 17V9h8v8M14 12h4l2 5M8 9V6h4v3M7 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
   },
   {
@@ -183,8 +192,8 @@ const highlights = [
         <a href={asset('/bezoek')} class="btn mt-6">Route en parkeren</a>
       </div>
       <img
-        src={asset('/images/exposanten/treinenbeurs/beurs.jpg')}
-        alt="Bezoekers op de treinenbeurs"
+        src={asset('/images/algemeen/treinenbeurs-2024.jpg')}
+        alt="Een bezoeker zoekt tussen de dozen op de treinenbeurs"
         loading="lazy"
         decoding="async"
         class="w-full aspect-[4/3] object-cover rounded-xl shadow-sm"
@@ -228,7 +237,7 @@ const highlights = [
   <section class="py-12 md:py-16 bg-white border-t border-gray-200">
     <div class="max-w-6xl mx-auto px-4">
       <div class="flex items-baseline justify-between mb-8 flex-wrap gap-2">
-        <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal">Vorige editie</h2>
+        <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal">Vorige edities</h2>
         <a href={asset('/galerij')} class="btn">Naar de galerij</a>
       </div>
       <Carousel images={preview} id="home-galerij" />

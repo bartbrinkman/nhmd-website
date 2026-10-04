@@ -15,13 +15,15 @@ interface Props {
   float?: boolean;
   /** Bigger sheets, for the homepage hero where the poster is the centrepiece. */
   large?: boolean;
+  /** Straight-on and centred, for a poster inside article copy. */
+  flat?: boolean;
 }
 
-const { items, float = false, large = false } = Astro.props;
+const { items, float = false, large = false, flat = false } = Astro.props;
 ---
 
 {items.length > 0 && (
-  <div class:list={['standee', float && 'standee--float', large && 'standee--large']}>
+  <div class:list={['standee', float && 'standee--float', large && 'standee--large', flat && 'standee--flat']}>
     {items.map((item) => (
       <span class="standee__slot">
         <button

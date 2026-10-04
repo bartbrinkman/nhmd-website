@@ -3,6 +3,7 @@ title: "Voorbereidingen NMD Dagen 2027 begonnen"
 date: 2026-07-22
 summary: "We nodigen banen uit, we verhuren tafels voor verkoop en langzaam maar zeker krijgt het evenement vorm."
 image: "/images/brochure/nmd-dagen-2027.jpg"
+poster: "/images/brochure/nmd-dagen-2027.jpg"
 ---
 
 We zijn begonnen met de organisatie van de NMD Dagen 2027. We nodigen banen

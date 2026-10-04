@@ -25,7 +25,7 @@
     {
       "src": "/images/galerij/2026/20260301_115541.jpg",
       "title": "Treinenbeurs",
-      "description": "Bakken vol rijtuigen en wagens"
+      "description": "Bakken vol treinen en wagens"
     },
     {
       "src": "/images/galerij/2026/20260301_120159.jpg",
@@ -219,6 +219,10 @@
     {
       "src": "/images/galerij/2026/20260301_125617.jpg",
       "title": ""
+    },
+    {
+      "src": "/images/galerij/2026/20260227_155223.jpg",
+      "title": "Opbouw op vrijdag"
     }
   ],
   "2025": [
@@ -337,27 +341,6 @@
       "title": ""
     }
   ],
-  "voorbereidingen-2025": [
-    {
-      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-1.jpg",
-      "title": "Georganiseerde chaos",
-      "description": "Dozen staan opgestapeld, mensen komen binnen met koopwaar en banen"
-    },
-    {
-      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-2.jpg",
-      "title": "Ik heb m'n wagen volgeladen..."
-    },
-    {
-      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-3.jpg",
-      "title": "Laatste kleine reparaties",
-      "description": "Moet dit draadje nou hier of daar..?"
-    },
-    {
-      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-4.jpg",
-      "title": "Deze staat klaar",
-      "description": "Nu de rest nog!"
-    }
-  ],
   "waeghspoor": [
     {
       "src": "/images/exposanten/waeghspoor/kaart.jpg",
@@ -400,21 +383,26 @@
   ],
   "modelspoorclub-alkmaar": [
     {
-      "src": "/images/exposanten/modelspoorclub-alkmaar/kaart.jpg",
-      "title": "Het Zijperspoor",
-      "description": "Stoomtram Warmenhuizen – Schagen de Loet"
+      "src": "/images/exposanten/modelspoorclub-alkmaar/20230226_134306.jpg",
+      "title": "Stoomtram op de modulebaan"
     },
     {
-      "src": "/images/exposanten/modelspoorclub-alkmaar/20230226_134306.jpg",
-      "title": "Stoomtram op het emplacement"
+      "src": "/images/exposanten/modelspoorclub-alkmaar/20251216_212057.jpg",
+      "title": "De nieuwe Bergenbaan in opbouw",
+      "description": "Nieuwe modules, nieuw spoor"
+    },
+    {
+      "src": "/images/exposanten/modelspoorclub-alkmaar/20251216_220249.jpg",
+      "title": "Rails leggen op de nieuwe modules"
     },
     {
       "src": "/images/exposanten/modelspoorclub-alkmaar/20230226_134822.jpg",
       "title": ""
     },
     {
-      "src": "/images/exposanten/modelspoorclub-alkmaar/20230226_152801.jpg",
-      "title": "Nog in aanbouw"
+      "src": "/images/exposanten/modelspoorclub-alkmaar/kaart.jpg",
+      "title": "Het Zijperspoor",
+      "description": "Warmenhuizen – Schagen de Loet, op een eerdere editie"
     }
   ],
   "westfriese-modelspoorclub": [
@@ -426,6 +414,27 @@
     {
       "src": "/images/exposanten/westfriese-modelspoorclub/kinderbaan.jpg",
       "title": "Kinderbaan in H0"
+    }
+  ],
+  "voorbereidingen-2025": [
+    {
+      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-1.jpg",
+      "title": "Georganiseerde chaos",
+      "description": "Dozen staan opgestapeld, mensen komen binnen met koopwaar en banen"
+    },
+    {
+      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-2.jpg",
+      "title": "Ik heb m'n wagen volgeladen..."
+    },
+    {
+      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-3.jpg",
+      "title": "Laatste kleine reparaties",
+      "description": "Moet dit draadje nou hier of daar..?"
+    },
+    {
+      "src": "/images/nieuws/voorbereidingen-2025/afbeelding-4.jpg",
+      "title": "Deze staat klaar",
+      "description": "Nu de rest nog!"
     }
   ]
 }

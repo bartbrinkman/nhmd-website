@@ -22,6 +22,8 @@ const nieuws = defineCollection({
     image: z.string().optional(),
     /** Optional link to a related page, e.g. /exposanten/lokdokter */
     link: z.string().optional(),
+    /** Event poster, shown centred and clickable to view full size. */
+    poster: z.string().optional(),
     /** Key in carousels.json, shown as a photo gallery under the bericht. */
     gallery: z.string().optional(),
     /** YouTube videos embedded under the bericht (privacy-enhanced mode). */

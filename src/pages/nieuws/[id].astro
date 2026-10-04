@@ -1,6 +1,7 @@
 ---
 import Page from '../../layouts/Page.astro';
 import Carousel from '../../components/Carousel.astro';
+import BrochureStand from '../../components/BrochureStand.astro';
 import carousels from '../../content/carousels.json';
 import { getCollection } from 'astro:content';
 import { asset, months } from '../../utils';
@@ -55,7 +56,13 @@ const gallery = entry.data.gallery
     </>
   )}
 
-  {!gallery && entry.data.image && (
+  {entry.data.poster && (
+    <div class="not-prose my-10">
+      <BrochureStand flat items={[{ src: entry.data.poster, alt: `Poster: ${entry.data.title}` }]} />
+    </div>
+  )}
+
+  {!gallery && !entry.data.poster && entry.data.image && (
     <img src={asset(entry.data.image)} alt="" loading="lazy" class="w-full max-w-md" />
   )}
 </Page>

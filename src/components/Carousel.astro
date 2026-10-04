@@ -1,8 +1,11 @@
 ---
 interface Image {
+  /** Photo path under public/, or for a video its thumbnail (may be a full URL). */
   src: string;
   title: string;
   description?: string;
+  /** YouTube id: the tile shows a play button and the lightbox plays the video. */
+  video?: string;
 }
 
 interface Props {
@@ -10,7 +13,7 @@ interface Props {
   id: string;
 }
 
-import { asset } from '../utils';
+import { href } from '../utils';
 const { images, id } = Astro.props;
 
 // Photos are shown as a paged mosaic: up to five per page in a 4x2 grid, one of
@@ -47,15 +50,23 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
                 class:list={['carousel-slide group relative block overflow-hidden text-left cursor-zoom-in', tileClass(i, page.length, p % 2 === 1)]}
                 data-title={img.title || ''}
                 data-description={img.description || ''}
-                aria-label={img.title ? `Vergroot: ${img.title}` : 'Vergroot foto'}
+                data-video={img.video}
+                aria-label={img.video ? `Speel video af: ${img.title}` : img.title ? `Vergroot: ${img.title}` : 'Vergroot foto'}
               >
                 <img
-                  src={asset(img.src)}
+                  src={href(img.src)}
                   alt={img.title || ''}
                   class="carousel-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading={p === 0 ? 'eager' : 'lazy'}
                   decoding="async"
                 />
+                {img.video && (
+                  <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                    <span class:list={['flex items-center justify-center rounded-full bg-black/60 text-white shadow-lg transition-colors group-hover:bg-accent', isFeature ? 'h-16 w-16' : 'h-11 w-11']}>
+                      <svg class:list={[isFeature ? 'h-7 w-7' : 'h-5 w-5', 'ml-1']} viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                    </span>
+                  </span>
+                )}
                 {img.title && (
                   <span
                     class:list={[
@@ -126,6 +137,9 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
   </button>
   <div class="flex flex-col items-center max-w-[90vw] max-h-[90vh]">
     <img id="lightbox-img" class="max-w-full max-h-[80vh] object-contain" src="" alt="" />
+    <div id="lightbox-video" class="hidden w-[min(90vw,calc(80vh*16/9))] aspect-video">
+      <iframe class="h-full w-full" src="" title="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
     <div id="lightbox-caption" class="text-white text-sm mt-3 text-center"></div>
   </div>
 </div>
@@ -199,9 +213,11 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
     const lbClose = document.getElementById('lightbox-close')!;
     const lbPrev = document.getElementById('lightbox-prev')!;
     const lbNext = document.getElementById('lightbox-next')!;
+    const lbVideo = document.getElementById('lightbox-video')!;
+    const lbFrame = lbVideo.querySelector('iframe') as HTMLIFrameElement;
     lb.setAttribute('data-init', '1');
 
-    type Slide = { src: string; title: string; description?: string };
+    type Slide = { src: string; title: string; description?: string; video?: string };
     let lbImages: Slide[] = [];
     let lbIndex = 0;
 
@@ -216,6 +232,8 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
     }
 
     function hideLightbox() {
+      // Unloading the player is what stops the sound.
+      lbFrame.src = '';
       lb.classList.add('hidden');
       lb.classList.remove('flex');
       document.body.style.overflow = '';
@@ -223,8 +241,18 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
 
     function updateLightbox() {
       const img = lbImages[lbIndex];
-      lbImg.src = img.src;
-      lbImg.alt = img.title;
+      if (img.video) {
+        lbImg.classList.add('hidden');
+        lbVideo.classList.remove('hidden');
+        lbFrame.title = img.title;
+        lbFrame.src = `https://www.youtube-nocookie.com/embed/${img.video}?autoplay=1&rel=0&modestbranding=1`;
+      } else {
+        lbFrame.src = '';
+        lbVideo.classList.add('hidden');
+        lbImg.classList.remove('hidden');
+        lbImg.src = img.src;
+        lbImg.alt = img.title;
+      }
       const parts = [];
       if (img.title) parts.push(`<strong>${img.title}</strong>`);
       if (img.description) parts.push(img.description);
@@ -264,6 +292,7 @@ function tileClass(i: number, n: number, featureRight: boolean): string {
           src: img.src,
           title: t.dataset.title || '',
           description: t.dataset.description || undefined,
+          video: t.dataset.video || undefined,
         });
       });
       tiles.forEach((tile, i) => {

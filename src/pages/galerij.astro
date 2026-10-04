@@ -2,14 +2,33 @@
 import Base from '../layouts/Base.astro';
 import Carousel from '../components/Carousel.astro';
 import carousels from '../content/carousels.json';
-import { asset } from '../utils';
+import { getCollection } from 'astro:content';
 
 // One gallery per edition: every carousels.json key that is a year, newest
 // first. Adding next year's photos is a new key, nothing else.
-type Slide = { src: string; title: string; description?: string };
+type Slide = { src: string; title: string; description?: string; video?: string };
+
+// Videos come from the nieuwsbericht that uses an edition's album (the
+// terugblik), and lead that album as play tiles. They live in the bericht's
+// frontmatter only, so the bericht itself does not show them twice.
+const videosByAlbum = new Map<string, Slide[]>();
+for (const n of await getCollection('nieuws', ({ data }) => !data.draft)) {
+  if (!n.data.gallery || n.data.videos.length === 0) continue;
+  videosByAlbum.set(n.data.gallery, [
+    ...(videosByAlbum.get(n.data.gallery) ?? []),
+    ...n.data.videos.map(v => ({
+      src: `https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg`,
+      title: v.title,
+      description: 'Video',
+      video: v.id,
+    })),
+  ]);
+}
+
 const edities = Object.entries(carousels as Record<string, Slide[]>)
   .filter(([key]) => /^\d{4}$/.test(key))
-  .sort(([a], [b]) => b.localeCompare(a));
+  .sort(([a], [b]) => b.localeCompare(a))
+  .map(([jaar, photos]) => [jaar, [...(videosByAlbum.get(jaar) ?? []), ...photos]] as const);
 ---
 
 <Base title="Galerij" description="Foto's van eerdere edities van de Noord-Hollandse Modelspoordagen.">
@@ -32,18 +51,13 @@ const edities = Object.entries(carousels as Record<string, Slide[]>)
       <section id={`editie-${jaar}`} class="scroll-mt-6">
         <div class="flex items-baseline justify-between mb-6 flex-wrap gap-2">
           <h2 class="section-title text-xl md:text-2xl font-bold font-heading uppercase text-primary">Modelspoordagen {jaar}</h2>
-          <span class="text-sm text-gray-500">{images.length} foto's</span>
+          <span class="text-sm text-gray-500">
+            {images.filter(i => !i.video).length} foto's
+            {images.some(i => i.video) && <> · {images.filter(i => i.video).length} video's</>}
+          </span>
         </div>
         <Carousel images={images} id={`galerij-${jaar}`} />
       </section>
     ))}
-
-    <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
-      <h2 class="font-heading uppercase text-lg font-bold text-primary mb-2">Liever bewegend beeld?</h2>
-      <p class="text-gray-700">
-        Bij de <a href={asset('/nieuws/terugblik-2025')} class="text-primary-light font-semibold">terugblik op 2025</a>
-        staan een korte samenvatting en een uitgebreide video van alle banen.
-      </p>
-    </div>
   </div>
 </Base>
