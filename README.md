@@ -51,11 +51,11 @@ pushes stay green. Set these under Settings > Secrets and variables > Actions
 | `FTP_USERNAME` | the hosting account name |
 | `FTP_PASSWORD` | the hosting account password |
 
-Optional repository variables (Variables tab), for host-specific settings:
+Host-specific settings, as repository variables (Variables tab) or secrets:
 
-| Variable | Default | Meaning |
+| Name | Default | Meaning |
 | --- | --- | --- |
-| `FTP_REMOTE_DIR` | `/httpdocs/` | The web root on the server |
+| `FTP_REMOTE_DIR` | none, required | The web root as the FTP account sees it: `/` if the account opens in the web root (as on the current cPanel host), `/public_html/` for the main cPanel login |
 | `FTP_VERIFY_CERT` | `yes` | Set to `no` if the host's FTPS certificate does not match its name (common on shared hosting; the transfer stays encrypted) |
 
 The upload never deletes: `lftp mirror` runs without `--delete`, so whatever is

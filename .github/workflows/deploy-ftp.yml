@@ -20,10 +20,11 @@ jobs:
       FTP_SERVER: ${{ secrets.FTP_SERVER }}
       FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-      # Host-specific, set as repository variables (Settings > Secrets and
-      # variables > Actions > Variables). Defaults suit a Plesk-style host.
-      FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR || '/httpdocs/' }}
-      FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || 'yes' }}
+      # Host-specific. Read from a repository variable or a secret, whichever
+      # was used. The remote folder has no default: uploading to a guessed
+      # path would scatter the site into a stray folder on the server.
+      FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR || secrets.FTP_REMOTE_DIR }}
+      FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || secrets.FTP_VERIFY_CERT || 'yes' }}
     steps:
       # Until the host's credentials are stored as secrets, skip instead of
       # failing every push.
@@ -33,7 +34,11 @@ jobs:
           if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
             echo "FTP secrets not set; skipping the deploy to nhmd.nl."
             echo "ready=false" >> "$GITHUB_OUTPUT"
+          elif [ -z "$FTP_REMOTE_DIR" ]; then
+            echo "::error::FTP_REMOTE_DIR is not set. Add it as a repository variable, e.g. / or /public_html/."
+            exit 1
           else
+            echo "Uploading to $FTP_SERVER, folder $FTP_REMOTE_DIR"
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
