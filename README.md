@@ -28,6 +28,44 @@ Output goes to `dist/`. The base path and canonical URL come from the
 `BASE_PATH` and `SITE_URL` env vars (see `astro.config.mjs`); the GitHub Pages
 defaults apply when they are unset.
 
+## Deploy
+
+Push to `main` and GitHub Actions deploys to two targets:
+
+| Workflow | Target | Base path |
+| --- | --- | --- |
+| `deploy.yml` | GitHub Pages: <https://bartbrinkman.github.io/nhmd-website/> | `/nhmd-website` |
+| `deploy-ftp.yml` | The live site: <https://www.nhmd.nl/> | `/` |
+
+To deploy manually: Actions tab > pick the workflow > Run workflow.
+
+### FTP setup
+
+`deploy-ftp.yml` uploads over FTPS. Until its secrets exist it skips itself, so
+pushes stay green. Set these under Settings > Secrets and variables > Actions
+(or with `gh secret set NAME`); never commit them:
+
+| Secret | Value |
+| --- | --- |
+| `FTP_SERVER` | the host's FTP server name |
+| `FTP_USERNAME` | the hosting account name |
+| `FTP_PASSWORD` | the hosting account password |
+
+Optional repository variables (Variables tab), for host-specific settings:
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `FTP_REMOTE_DIR` | `/httpdocs/` | The web root on the server |
+| `FTP_VERIFY_CERT` | `yes` | Set to `no` if the host's FTPS certificate does not match its name (common on shared hosting; the transfer stays encrypted) |
+
+The upload never deletes: `lftp mirror` runs without `--delete`, so whatever is
+already on the host (the old JouwWeb export, if any) stays until removed by
+hand. Images and assets upload only when their size changes; HTML is always
+re-sent.
+
+When nhmd.nl moves over, also set up redirects for the old JouwWeb URLs
+(`/informatie/verenigingen/...`, `/nieuws/2342378_...`).
+
 ## Tests
 
 ```bash

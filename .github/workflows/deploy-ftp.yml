@@ -1,0 +1,91 @@
+name: Deploy to nhmd.nl
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time: two overlapping uploads would interleave writes.
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      # Host-specific, set as repository variables (Settings > Secrets and
+      # variables > Actions > Variables). Defaults suit a Plesk-style host.
+      FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR || '/httpdocs/' }}
+      FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || 'yes' }}
+    steps:
+      # Until the host's credentials are stored as secrets, skip instead of
+      # failing every push.
+      - name: Check FTP credentials
+        id: creds
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "FTP secrets not set; skipping the deploy to nhmd.nl."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v6
+        if: steps.creds.outputs.ready == 'true'
+
+      - uses: actions/setup-node@v7
+        if: steps.creds.outputs.ready == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+        if: steps.creds.outputs.ready == 'true'
+
+      - name: Build for the site root
+        if: steps.creds.outputs.ready == 'true'
+        run: npm run build
+        env:
+          SITE_URL: https://www.nhmd.nl
+          BASE_PATH: /
+
+      # Uploads only; nothing on the server is ever removed. lftp's `mirror`
+      # deletes only when passed --delete, which is deliberately absent here, so
+      # anything already on the host is left alone and files are overwritten in
+      # place.
+      #
+      # Two passes, because Astro rewrites every file on every build and so
+      # every local mtime is newer than the server's:
+      #   1. --ignore-time compares by size instead, so images and
+      #      content-hashed assets only move when they actually change.
+      #   2. the HTML is small and its size can stay identical across a real
+      #      edit, so it is pushed unconditionally with --ignore-size.
+      - name: Upload over FTPS
+        if: steps.creds.outputs.ready == 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+          # HTML-only copy of the tree for the forced second pass
+          rsync -a --include='*/' --include='*.html' --exclude='*' --prune-empty-dirs dist/ html-only/
+
+          lftp -c "
+            set cmd:fail-exit true;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate $FTP_VERIFY_CERT;
+            set net:max-retries 3;
+            set net:timeout 30;
+            open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\";
+            mirror --reverse --ignore-time --parallel=4 --verbose dist/ $FTP_REMOTE_DIR;
+            mirror --reverse --ignore-time --ignore-size --parallel=2 --verbose html-only/ $FTP_REMOTE_DIR;
+          "
+
+          echo "Upload finished. No --delete was passed, so nothing was removed."
