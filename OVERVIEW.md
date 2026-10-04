@@ -15,7 +15,7 @@ A rebuild of the [Noord-Hollandse Modelspoordagen](https://www.nhmd.nl/) website
 ```
 /                         Home: hero slideshow + poster, wat is er te zien, praktisch, nieuws, vorige editie
 /bezoek                   Bezoekersinformatie: openingstijden, entree, adres, parkeren, OV
-/exposanten/              Overview: organiserende verenigingen + ook aanwezig
+/exposanten/              Overview: gastbanen, banen van de organiserende clubs, treinenbeurs en Lokdokter
   waeghspoor              AMG "Het Waeghspoor"
   mvw-waterland           Modelbouw Vereniging Waterland
   modelspoorclub-alkmaar  Modelspoorclub Alkmaar (Zijperspoor)

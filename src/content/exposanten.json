@@ -1,5 +1,14 @@
 [
   {
+    "title": "Gastbanen",
+    "href": "/exposanten/gastbanen",
+    "scale": "Diverse schalen",
+    "description": "Clubs en bouwers van buiten de organisatie, op uitnodiging.",
+    "category": "gast",
+    "status": "Wordt aangevuld",
+    "image": "/images/galerij/2024/20240218_103608.jpg"
+  },
+  {
     "title": "AMG \"Het Waeghspoor\"",
     "href": "/exposanten/waeghspoor",
     "scale": "H0 en N",
@@ -36,7 +45,7 @@
     "href": "/exposanten/treinenbeurs",
     "scale": "Alle schalen",
     "description": "Langs vele kramen en verkopers: alles wat de modelspoorhobby te bieden heeft.",
-    "category": "aanwezig",
+    "category": "beurs",
     "image": "/images/exposanten/treinenbeurs/beurs.jpg"
   },
   {
@@ -44,16 +53,7 @@
     "href": "/exposanten/lokdokter",
     "scale": "Gratis advies",
     "description": "Doet uw loc het niet meer? Neem hem mee voor een gratis inspectie en advies.",
-    "category": "aanwezig",
+    "category": "beurs",
     "image": "/images/exposanten/lokdokter/lokdokter.jpg"
-  },
-  {
-    "title": "Gastbanen",
-    "href": "/exposanten/gastbanen",
-    "scale": "Diverse schalen",
-    "description": "Clubs en bouwers van buiten de organisatie, op uitnodiging.",
-    "category": "aanwezig",
-    "status": "Wordt aangevuld",
-    "image": "/images/galerij/2024/20240218_103608.jpg"
   }
 ]

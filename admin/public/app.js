@@ -536,8 +536,9 @@ function selectField(label, row, key, options, ed) {
 // --- exposanten editor --------------------------------------------------
 
 const EXPOSANT_CATEGORIES = [
-  { value: 'organisator', label: 'organisator' },
-  { value: 'aanwezig', label: 'ook aanwezig' },
+  { value: 'gast', label: 'gastbaan' },
+  { value: 'organisator', label: 'organiserende club' },
+  { value: 'beurs', label: 'beurs / Lokdokter' },
 ];
 
 const exposantenEditor = createRowEditor({
@@ -545,7 +546,7 @@ const exposantenEditor = createRowEditor({
   listEl: $('#exposanten-list'),
   addBtn: $('#exposanten-add'),
   saveBtn: $('#exposanten-save'),
-  blank: { title: '', href: '', scale: '', description: '', category: 'organisator' },
+  blank: { title: '', href: '', scale: '', description: '', category: 'gast' },
   renderRow(row, i, ed) {
     return el('div', { class: 'row' }, [
       el('div', { class: 'row-body' }, [

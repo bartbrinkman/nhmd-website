@@ -17,7 +17,7 @@ See [OVERVIEW.md](OVERVIEW.md) for stack and structure.
 
 ## Exposanten
 
-[src/content/exposanten.json](src/content/exposanten.json) is the single source for the exposant cards (homepage, `/exposanten`, Over, Contact). `category` is `organisator` (the four clubs) or `aanwezig` (beurs, Lokdokter, gastbanen). Each entry has a page under [src/pages/exposanten/](src/pages/exposanten/); check both directions when adding one.
+[src/content/exposanten.json](src/content/exposanten.json) is the single source for the exposant cards (`/exposanten`, Over, Contact). `category` is `gast` (gastbanen; one card per announced gastbaan, the general Gastbanen card first), `organisator` (the four clubs) or `beurs` (Treinenbeurs, then Lokdokter last). `/exposanten` shows the three groups in that order, with gastbanen as the main draw. The Lokdokter is not on the homepage; its slot in the homepage tiles is "Veel gastbanen". Each entry has a page under [src/pages/exposanten/](src/pages/exposanten/); check both directions when adding one.
 
 ## Photos
 

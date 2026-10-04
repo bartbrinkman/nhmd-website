@@ -13,13 +13,15 @@ interface Props {
   /** Lift the sheets out of flow so they overhang the section instead of
       stretching it. Needs a positioned ancestor. */
   float?: boolean;
+  /** Bigger sheets, for the homepage hero where the poster is the centrepiece. */
+  large?: boolean;
 }
 
-const { items, float = false } = Astro.props;
+const { items, float = false, large = false } = Astro.props;
 ---
 
 {items.length > 0 && (
-  <div class:list={['standee', float && 'standee--float']}>
+  <div class:list={['standee', float && 'standee--float', large && 'standee--large']}>
     {items.map((item) => (
       <span class="standee__slot">
         <button

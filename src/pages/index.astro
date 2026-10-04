@@ -49,9 +49,9 @@ const highlights = [
     icon: 'M4 17h16M6 17V9h8v8M14 12h4l2 5M8 9V6h4v3M7 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
   },
   {
-    title: 'Lokdokter',
-    text: 'Doet uw loc het niet meer? Neem hem mee voor een gratis inspectie en advies.',
-    icon: 'M12 6v12M6 12h12M4.5 4.5h15v15h-15z',
+    title: 'Veel gastbanen',
+    text: 'Naast de banen van de organiserende clubs een groot aantal gastbanen van clubs en bouwers van buiten de organisatie.',
+    icon: 'M3 5h8v6H3zM13 5h8v6h-8zM3 13h8v6H3zM13 13h8v6h-8z',
   },
 ];
 ---
@@ -80,9 +80,9 @@ const highlights = [
             Noord-Hollandse<br />Modelspoordagen
           </h1>
           <p class="text-base md:text-lg text-white/85 mb-2">
-            Een weekend lang modelspoorbanen van clubs uit de regio en een grote
-            treinenbeurs. Voor liefhebbers, en voor iedereen die gewoon graag
-            treinen ziet rijden.
+            Ruim 150 meter modelspoor: naast de banen van de organiserende clubs
+            een groot aantal gastbanen, en een grote treinenbeurs. Voor
+            liefhebbers, en voor iedereen die gewoon graag treinen ziet rijden.
           </p>
           {editie ? (
             <dl class="meta">
@@ -102,9 +102,10 @@ const highlights = [
             </a>
           </div>
         </div>
-        <div class="hidden md:block">
+        <div class="hidden lg:block">
           <BrochureStand
             float
+            large
             items={[{ src: '/images/brochure/nmd-dagen-2027.jpg', alt: 'Poster van de Noord-Hollandse Modelspoordagen' }]}
           />
         </div>

@@ -390,6 +390,12 @@ body {
   .standee__slot { width: 9rem; }
 }
 
+/* Large: the homepage hero, where there is room for the poster to be read.
+   Only from lg up; narrower, a big sheet would cover the hero copy. */
+@media (min-width: 1024px) {
+  .standee--large .standee__slot { width: 17rem; }
+}
+
 .standee__slot + .standee__slot {
   margin-left: -3.75rem;
   z-index: 2;

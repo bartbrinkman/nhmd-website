@@ -4,8 +4,26 @@ import LayoutCard from '../../components/LayoutCard.astro';
 import exposanten from '../../content/exposanten.json';
 import { asset } from '../../utils';
 
-const organisatoren = exposanten.filter(e => e.category === 'organisator');
-const aanwezig = exposanten.filter(e => e.category === 'aanwezig');
+// Three groups, in the order a visitor cares about them: the gastbanen are the
+// main draw, then the organising clubs' own banen, then the beurs. Within a
+// group the order is that of exposanten.json.
+const groups = [
+  {
+    category: 'gast',
+    title: 'Gastbanen',
+    intro: 'Naast de banen van de organiserende clubs komt er een groot aantal gastbanen naar Alkmaar, van clubs en bouwers van buiten de organisatie.',
+  },
+  {
+    category: 'organisator',
+    title: 'Banen van de organiserende clubs',
+    intro: 'Vier modelspoorclubs uit Noord-Holland organiseren de Modelspoordagen samen, en komen elk met hun eigen banen.',
+  },
+  {
+    category: 'beurs',
+    title: 'Treinenbeurs en Lokdokter',
+    intro: 'Kopen, verkopen en ruilen op de beurs, en gratis advies voor uw eigen locomotief.',
+  },
+].map(g => ({ ...g, items: exposanten.filter(e => e.category === g.category) }));
 ---
 
 <Base title="Exposanten" description="Welke modelspoorbanen, clubs en standhouders zijn er te zien op de Noord-Hollandse Modelspoordagen?">
@@ -13,29 +31,26 @@ const aanwezig = exposanten.filter(e => e.category === 'aanwezig');
     <div class="max-w-6xl mx-auto px-4">
       <h1 class="text-3xl md:text-5xl font-bold font-heading uppercase tracking-normal leading-tight">Exposanten</h1>
       <p class="mt-3 text-white/80 max-w-2xl">
-        Wie staat er op de Modelspoordagen? De vier organiserende clubs komen
-        elk met hun eigen banen, aangevuld met gastbanen, de treinenbeurs en de
-        Lokdokter.
+        Ruim 150 meter modelspoor: een groot aantal gastbanen en de banen van
+        de vier organiserende clubs. Daarnaast de treinenbeurs en de Lokdokter.
       </p>
     </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
-    <h2 class="section-title text-xl md:text-2xl font-bold font-heading uppercase text-primary mb-6">Organiserende verenigingen</h2>
-    <div class="grid gap-6 sm:grid-cols-2">
-      {organisatoren.map((e) => (
-        <LayoutCard title={e.title} href={e.href} scale={e.scale} description={e.description} status={e.status} image={e.image} />
-      ))}
-    </div>
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-12">
+    {groups.filter(g => g.items.length > 0).map(g => (
+      <section>
+        <h2 class="section-title text-xl md:text-2xl font-bold font-heading uppercase text-primary mb-3">{g.title}</h2>
+        <p class="text-gray-600 max-w-2xl mb-6">{g.intro}</p>
+        <div class="grid gap-6 sm:grid-cols-2">
+          {g.items.map((e) => (
+            <LayoutCard title={e.title} href={e.href} scale={e.scale} description={e.description} status={e.status} image={e.image} />
+          ))}
+        </div>
+      </section>
+    ))}
 
-    <h2 class="section-title text-xl md:text-2xl font-bold font-heading uppercase text-primary mt-12 mb-6">Ook aanwezig</h2>
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {aanwezig.map((e) => (
-        <LayoutCard title={e.title} href={e.href} scale={e.scale} description={e.description} status={e.status} image={e.image} />
-      ))}
-    </div>
-
-    <div class="mt-12 p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
+    <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
       <h2 class="font-heading uppercase text-lg font-bold text-primary mb-2">Zelf exposeren?</h2>
       <p class="text-gray-700">
         Heeft u een baan om te tonen, of wilt u een tafel op de beurs?
