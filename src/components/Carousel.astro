@@ -1,0 +1,274 @@
+---
+interface Image {
+  src: string;
+  title: string;
+  description?: string;
+}
+
+interface Props {
+  images: Image[];
+  id: string;
+}
+
+import { asset } from '../utils';
+const { images, id } = Astro.props;
+
+// Photos are shown as a paged mosaic: up to five per page in a 4x2 grid, one of
+// them a 2x2 feature tile. The feature sits left on even pages and right on odd
+// ones so a long gallery does not look like the same page repeated. Short pages
+// (the tail of a gallery, or a small one) get their own fill so the grid never
+// shows a hole.
+const PER_PAGE = 5;
+const pages: Image[][] = [];
+for (let i = 0; i < images.length; i += PER_PAGE) pages.push(images.slice(i, i + PER_PAGE));
+
+/** Grid placement for tile `i` on a page of `n` tiles. Mobile is 2 columns
+    (feature spans both), sm+ is 4 columns x 2 rows. */
+function tileClass(i: number, n: number, featureRight: boolean): string {
+  const feature = featureRight ? 'col-span-2 row-span-2 sm:col-start-3' : 'col-span-2 row-span-2';
+  if (n === 1) return 'col-span-2 row-span-2 sm:col-span-4';
+  if (n === 2) return 'col-span-2 row-span-2';
+  if (n === 3) return i === 0 ? feature : 'col-span-1 row-span-1 sm:col-span-2';
+  if (n === 4) return i === 0 ? feature : i === 1 ? 'col-span-2 row-span-1' : 'col-span-1 row-span-1';
+  return i === 0 ? feature : 'col-span-1 row-span-1';
+}
+---
+
+<div class="carousel relative mb-8" id={id} tabindex="0">
+  <div class="relative overflow-hidden rounded-lg">
+    <div class="carousel-track flex transition-transform duration-300 ease-in-out">
+      {pages.map((page, p) => (
+        <div class="carousel-page min-w-full grid grid-cols-2 sm:grid-cols-4 auto-rows-[7rem] sm:auto-rows-[12rem] gap-0.5 bg-white [grid-auto-flow:dense]">
+          {page.map((img, i) => {
+            const isFeature = i === 0 && page.length > 2;
+            return (
+              <button
+                type="button"
+                class:list={['carousel-slide group relative block overflow-hidden text-left cursor-zoom-in', tileClass(i, page.length, p % 2 === 1)]}
+                data-title={img.title || ''}
+                data-description={img.description || ''}
+                aria-label={img.title ? `Vergroot: ${img.title}` : 'Vergroot foto'}
+              >
+                <img
+                  src={asset(img.src)}
+                  alt={img.title || ''}
+                  class="carousel-img absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading={p === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                {img.title && (
+                  <span
+                    class:list={[
+                      'absolute inset-x-0 bottom-0 px-3 pb-2 pt-8 bg-gradient-to-t from-black/70 to-transparent text-white leading-snug',
+                      isFeature ? 'text-sm' : 'text-xs opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity',
+                    ]}
+                  >
+                    <span class="font-semibold">{img.title}</span>
+                    {isFeature && img.description && <span class="text-white/80"> · {img.description}</span>}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+
+    {pages.length > 1 && (
+      <>
+        <button
+          type="button"
+          class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 bg-primary-dark/70 hover:bg-primary-dark text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors"
+          aria-label="Vorige foto's"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 bg-primary-dark/70 hover:bg-primary-dark text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors"
+          aria-label="Volgende foto's"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </>
+    )}
+  </div>
+
+  {pages.length > 1 && (
+    <div class="carousel-dots flex items-center justify-center gap-1.5 pt-3">
+      {pages.map((_, i) => (
+        <button
+          type="button"
+          class:list={[
+            'h-2 rounded-full transition-all',
+            i === 0 ? 'w-5 bg-primary' : 'w-2 bg-gray-300 hover:bg-gray-400',
+          ]}
+          aria-label={`Pagina ${i + 1} van ${pages.length}`}
+          data-index={i}
+        />
+      ))}
+    </div>
+  )}
+</div>
+
+<!-- Lightbox (one per page, shared) -->
+<div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center" tabindex="-1">
+  <button id="lightbox-close" class="absolute top-4 right-4 text-white/70 hover:text-white text-3xl leading-none z-10" aria-label="Sluiten">&times;</button>
+  <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10" aria-label="Vorige">
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+  </button>
+  <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10" aria-label="Volgende">
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+  </button>
+  <div class="flex flex-col items-center max-w-[90vw] max-h-[90vh]">
+    <img id="lightbox-img" class="max-w-full max-h-[80vh] object-contain" src="" alt="" />
+    <div id="lightbox-caption" class="text-white text-sm mt-3 text-center"></div>
+  </div>
+</div>
+
+<script>
+  // Paging
+  document.querySelectorAll('.carousel').forEach((carousel) => {
+    const track = carousel.querySelector('.carousel-track') as HTMLElement;
+    const dots = carousel.querySelectorAll('.carousel-dots button');
+    const prev = carousel.querySelector('.carousel-prev');
+    const next = carousel.querySelector('.carousel-next');
+    const total = carousel.querySelectorAll('.carousel-page').length;
+    let current = 0;
+
+    function goTo(index: number) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-primary', i === current);
+        dot.classList.toggle('w-5', i === current);
+        dot.classList.toggle('bg-gray-300', i !== current);
+        dot.classList.toggle('w-2', i !== current);
+      });
+    }
+
+    prev?.addEventListener('click', () => goTo(current - 1));
+    next?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goTo(Number((dot as HTMLElement).dataset.index));
+      });
+    });
+
+    carousel.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'ArrowLeft') goTo(current - 1);
+      if ((e as KeyboardEvent).key === 'ArrowRight') goTo(current + 1);
+    });
+
+    let startX = 0;
+    let startY = 0;
+    let swiped = false;
+    track.addEventListener('touchstart', (e) => {
+      startX = (e as TouchEvent).touches[0].clientX;
+      startY = (e as TouchEvent).touches[0].clientY;
+      swiped = false;
+    }, { passive: true });
+    track.addEventListener('touchmove', (e) => {
+      const t = (e as TouchEvent).touches[0];
+      if (Math.abs(t.clientX - startX) > 10 && Math.abs(t.clientX - startX) > Math.abs(t.clientY - startY)) {
+        swiped = true;
+      }
+    }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+      const diff = startX - (e as TouchEvent).changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+    });
+    // A swipe must not also open the lightbox for the tile it ended on.
+    track.addEventListener('click', (e) => {
+      if (swiped) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  });
+
+  // Lightbox logic (singleton)
+  if (!document.querySelector('#lightbox[data-init]')) {
+    const lb = document.getElementById('lightbox')!;
+    const lbImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lbCaption = document.getElementById('lightbox-caption')!;
+    const lbClose = document.getElementById('lightbox-close')!;
+    const lbPrev = document.getElementById('lightbox-prev')!;
+    const lbNext = document.getElementById('lightbox-next')!;
+    lb.setAttribute('data-init', '1');
+
+    type Slide = { src: string; title: string; description?: string };
+    let lbImages: Slide[] = [];
+    let lbIndex = 0;
+
+    function showLightbox(images: Slide[], index: number) {
+      lbImages = images;
+      lbIndex = index;
+      updateLightbox();
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+      lb.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideLightbox() {
+      lb.classList.add('hidden');
+      lb.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const img = lbImages[lbIndex];
+      lbImg.src = img.src;
+      lbImg.alt = img.title;
+      const parts = [];
+      if (img.title) parts.push(`<strong>${img.title}</strong>`);
+      if (img.description) parts.push(img.description);
+      lbCaption.innerHTML = parts.join(' · ');
+      lbPrev.style.display = lbImages.length > 1 ? '' : 'none';
+      lbNext.style.display = lbImages.length > 1 ? '' : 'none';
+    }
+
+    function lbGoTo(dir: number) {
+      lbIndex = ((lbIndex + dir) % lbImages.length + lbImages.length) % lbImages.length;
+      updateLightbox();
+    }
+
+    lbClose.addEventListener('click', hideLightbox);
+    lbPrev.addEventListener('click', () => lbGoTo(-1));
+    lbNext.addEventListener('click', () => lbGoTo(1));
+
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb) hideLightbox();
+    });
+
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideLightbox();
+      if (e.key === 'ArrowLeft') lbGoTo(-1);
+      if (e.key === 'ArrowRight') lbGoTo(1);
+    });
+
+    // Every tile in a gallery opens the lightbox on the whole gallery, across
+    // pages, so the viewer can keep stepping past the end of the page.
+    document.querySelectorAll('.carousel').forEach((carousel) => {
+      const tiles = carousel.querySelectorAll('.carousel-slide');
+      const images: Slide[] = [];
+      tiles.forEach((tile) => {
+        const img = tile.querySelector('img') as HTMLImageElement;
+        const t = tile as HTMLElement;
+        images.push({
+          src: img.src,
+          title: t.dataset.title || '',
+          description: t.dataset.description || undefined,
+        });
+      });
+      tiles.forEach((tile, i) => {
+        tile.addEventListener('click', () => showLightbox(images, i));
+      });
+    });
+  }
+</script>

@@ -1,0 +1,32 @@
+---
+import Page from '../../layouts/Page.astro';
+import { asset } from '../../utils';
+---
+
+<Page
+  title="Lokdokter"
+  hero="Lokdokter"
+  kicker="Ook aanwezig"
+  heroImage="/images/exposanten/lokdokter/lokdokter.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+>
+  <p class="text-lg text-gray-700">
+    Doet uw modeltrein het niet, heeft u een probleem of wilt u deskundig
+    advies? Op de Modelspoordagen kan dat kosteloos bij lokdokter Peter
+    Siebers.
+  </p>
+
+  <img src={asset('/images/exposanten/lokdokter/lokdokter.jpg')} alt="De lokdokter aan zijn werktafel" loading="lazy" class="w-full max-w-lg" />
+
+  <h2>Neem uw loc mee</h2>
+  <p>
+    Hij bekijkt uw locomotief gratis en geeft advies over de treinen die u
+    meeneemt. Klein of groot, digitaal of analoog, gelijk- of wisselstroom: het
+    maakt niets uit.
+  </p>
+  <p>
+    Waar mogelijk repareert hij de locomotief ter plekke, maar houd rekening met
+    drukte.
+  </p>
+</Page>

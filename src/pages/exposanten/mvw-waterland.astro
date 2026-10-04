@@ -1,0 +1,61 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+---
+
+<Page
+  title="Modelbouw Vereniging Waterland"
+  hero="Modelbouw Vereniging Waterland"
+  kicker="Organiserende vereniging"
+  heroImage="/images/exposanten/mvw-waterland/fleischmann-baan.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+  where="Purmerend"
+>
+  <p class="text-lg text-gray-700">
+    Op de Modelspoordagen komt de Modelbouw Vereniging Waterland met een
+    nostalgische Fleischmann-baan.
+  </p>
+
+  <Carousel images={carousels['mvw-waterland']} id="mvw-waterland" />
+
+  <h2>De Fleischmann-baan</h2>
+  <p>
+    De MVW kreeg de baan cadeau en laat hem graag zien. Er zijn enkele kleine
+    aanpassingen gedaan: bij de vorige eigenaar was de baan opklapbaar, wat de
+    bouwhoogte beperkte, dus de scenery is deels aangepast. Ook is het frame
+    lichter gemaakt. Verder is de uitstraling nog zoals de hobby beleefd werd in
+    de jaren '80 en '90 van de vorige eeuw. En wie is er niet zo begonnen?
+  </p>
+
+  <h2>De vereniging</h2>
+  <p>
+    De Modelbouw Vereniging Waterland is opgericht in 1980 en beschikt over een
+    groot verenigingsgebouw met een ruime kantine. Onder het genot van een
+    drankje kunt u zich daar laten informeren over alle takken van modelbouw
+    die op de vereniging te vinden zijn.
+  </p>
+  <p>De afdeling modelspoor heeft de volgende banen:</p>
+  <ul>
+    <li>Een H0-baan naar Nederlands voorbeeld, 2-rail gelijkstroom, met een aansluitend deel in 3-rail wisselstroom</li>
+    <li>Twee N-modulebanen</li>
+    <li>Een modulebaan naar Duits voorbeeld, gesitueerd in de jaren '70</li>
+    <li>Een Spoor 1-baan langs de wand van de H0-baan</li>
+  </ul>
+  <p>
+    Daarnaast houdt de vereniging jaarlijks open dagen in het eigen gebouw, en
+    af en toe rijdagen op de grote clubbaan. Ook gaan de leden regelmatig op
+    pad naar beurzen en evenementen in binnen- en buitenland, zoals Miniatur
+    Wunderland in Hamburg en de modelspoorbeurs in Keulen.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Modelbouw Vereniging Waterland e.o.<br />
+    Trimpad 8<br />
+    1443 WB Purmerend<br />
+    <a href="https://modelbouwverenigingwaterland.nl/" target="_blank" rel="noopener">modelbouwverenigingwaterland.nl</a> ·
+    <a href="mailto:bestuur@modelbouwvereniging.nl">bestuur@modelbouwvereniging.nl</a>
+  </p>
+</Page>

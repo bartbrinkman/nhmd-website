@@ -1,0 +1,32 @@
+---
+import Page from '../layouts/Page.astro';
+import exposanten from '../content/exposanten.json';
+import { asset } from '../utils';
+
+const organisatoren = exposanten.filter(e => e.category === 'organisator');
+---
+
+<Page title="Contact" hero="Contact" description="Neem contact op met de organisatie van de Noord-Hollandse Modelspoordagen.">
+  <h2>E-mail</h2>
+  <p>
+    Voor vragen over het evenement kunt u mailen naar
+    <a href="mailto:info@nhmd.nl">info@nhmd.nl</a>. Ook handelaren en wie een
+    tafel wil huren of een baan wil tonen, kunnen dit adres gebruiken; zie ook
+    <a href={asset('/deelnemen')}>deelnemen</a>.
+  </p>
+
+  <h2>Komen kijken?</h2>
+  <p>
+    Openingstijden, entree, route en parkeren staan bij de
+    <a href={asset('/bezoek')}>bezoekersinformatie</a>.
+  </p>
+
+  <h2>De organiserende clubs</h2>
+  <p>
+    Wilt u meer weten over een van de clubs, of zelf lid worden? Elke club
+    heeft een eigen pagina met adres en contactgegevens.
+  </p>
+  <ul>
+    {organisatoren.map(o => <li><a href={asset(o.href)}>{o.title}</a></li>)}
+  </ul>
+</Page>

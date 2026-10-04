@@ -1,0 +1,31 @@
+---
+import Page from '../../layouts/Page.astro';
+import { asset } from '../../utils';
+---
+
+<Page
+  title="Gastbanen"
+  hero="Gastbanen"
+  kicker="Ook aanwezig"
+  heroImage="/images/galerij/2024/20240218_103608.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+>
+  <p class="text-lg text-gray-700">
+    Naast de banen van de organiserende clubs nodigen we elk jaar clubs en
+    bouwers van buiten de organisatie uit om hun baan te tonen.
+  </p>
+
+  <h2>Deze editie</h2>
+  <p>
+    Welke gastbanen er komen, maken we hier en in het
+    <a href={asset('/nieuws')}>nieuws</a> bekend zodra het rond is. Een indruk
+    van eerdere edities vindt u in de <a href={asset('/galerij')}>galerij</a>.
+  </p>
+
+  <h2>Uw baan als gastbaan?</h2>
+  <p>
+    Wilt u uw baan op de Modelspoordagen laten zien? Lees hoe u kunt
+    <a href={asset('/deelnemen')}>deelnemen</a>.
+  </p>
+</Page>

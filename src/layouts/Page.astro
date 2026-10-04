@@ -1,0 +1,103 @@
+---
+import Base from './Base.astro';
+import BrochureStand from '../components/BrochureStand.astro';
+import EventCard from '../components/EventCard.astro';
+import events from '../content/events.json';
+import { asset, upcomingEvents, eventWhen } from '../utils';
+
+interface Props {
+  title: string;
+  description?: string;
+  hero?: string;
+  heroImage?: string;
+  /** Small label above the title, e.g. "Organiserende vereniging". */
+  kicker?: string;
+  /** Renders a back link above the title, e.g. back to the exposanten overview. */
+  backHref?: string;
+  backLabel?: string;
+  /** Poster/flyer for this activity, shown in the hero as a desk stand. */
+  brochure?: string;
+  brochureAlt?: string;
+  when?: string;
+  where?: string;
+}
+
+const { title, description, hero, heroImage, kicker, when, where, backHref, backLabel = 'Terug', brochure, brochureAlt } = Astro.props;
+
+// If events.json holds an upcoming event for this page, it is the authority on
+// when it happens: the date is shown from the data file rather than
+// written into the page, so it cannot go stale.
+const here = Astro.url.pathname.replace(/\/$/, '');
+const linkedEvent = upcomingEvents(events).find(
+  e => e.link && asset(e.link).replace(/\/$/, '') === here,
+);
+const whenLabel = linkedEvent ? eventWhen(linkedEvent) : when;
+---
+
+<Base title={title} description={description}>
+  {hero && (
+    <div class="relative bg-gradient-to-r from-primary-dark to-primary">
+      {heroImage && (
+        <>
+          <img src={asset(heroImage!)} alt="" class="absolute inset-0 w-full h-full object-cover opacity-25" />
+          <div class="absolute inset-0 bg-gradient-to-r from-primary-dark/80 to-primary/40" aria-hidden="true"></div>
+        </>
+      )}
+      <div class="relative text-white py-12 md:py-16">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div class="min-w-0 flex-1">
+          {backHref && (
+            <a
+              href={asset(backHref)}
+              class="group inline-flex items-center gap-1.5 mb-4 rounded-md bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+            >
+              <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              {backLabel}
+            </a>
+          )}
+          {kicker && (
+            <span class="block text-xs font-semibold uppercase tracking-[0.2em] text-sein mb-3">
+              {kicker}
+            </span>
+          )}
+          <h1 class="text-3xl md:text-5xl font-bold font-heading uppercase tracking-normal leading-tight">{hero}</h1>
+          {(whenLabel || where) && (
+            <dl class="meta">
+              {whenLabel && (
+                <div>
+                  <dt>Wanneer</dt>
+                  <dd>{whenLabel}</dd>
+                </div>
+              )}
+              {where && (
+                <div>
+                  <dt>Waar</dt>
+                  <dd>{where}</dd>
+                </div>
+              )}
+            </dl>
+          )}
+          </div>
+
+          {brochure && <BrochureStand items={[{ src: brochure, alt: brochureAlt ?? `Poster ${hero}` }]} />}
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+    <div class="prose">
+      <slot />
+    </div>
+
+    {linkedEvent && (
+      <div class="mt-10">
+        <h2 class="section-title text-lg font-bold font-heading uppercase tracking-normal text-primary mb-4">Eerstvolgende editie</h2>
+        <EventCard event={linkedEvent} linked={false} />
+      </div>
+    )}
+  </div>
+</Base>
+

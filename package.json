@@ -1,0 +1,32 @@
+{
+  "name": "nhmd-website",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "admin": "cd admin && (test -d node_modules || npm install) && npm start",
+    "resize": "cd admin && (test -d node_modules || npm install) && npm run resize",
+    "test:edit": "node --test --test-reporter=spec integrations/edit/rewrite.test.mjs integrations/edit/client.test.mjs",
+    "test": "node --test --test-reporter=spec src/utils.test.mts"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.8",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@tiptap/core": "^3.22.4",
+    "@tiptap/extension-bubble-menu": "^3.22.4",
+    "@tiptap/extension-link": "^3.22.4",
+    "@tiptap/starter-kit": "^3.22.4",
+    "jsdom": "^29.0.2",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

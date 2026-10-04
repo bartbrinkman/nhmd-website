@@ -1,0 +1,59 @@
+[
+  {
+    "title": "AMG \"Het Waeghspoor\"",
+    "href": "/exposanten/waeghspoor",
+    "scale": "H0 en N",
+    "description": "De Alkmaarse Module Groep komt met modulebanen in H0 en N, digitaal bestuurd met Koploper.",
+    "category": "organisator",
+    "image": "/images/exposanten/waeghspoor/kaart.jpg"
+  },
+  {
+    "title": "Modelbouw Vereniging Waterland",
+    "href": "/exposanten/mvw-waterland",
+    "scale": "H0",
+    "description": "Een nostalgische Fleischmann-baan, zoals de hobby beleefd werd in de jaren '80 en '90.",
+    "category": "organisator",
+    "image": "/images/exposanten/mvw-waterland/fleischmann-baan.jpg"
+  },
+  {
+    "title": "Modelspoorclub Alkmaar",
+    "href": "/exposanten/modelspoorclub-alkmaar",
+    "scale": "H0",
+    "description": "Het Zijperspoor: de Noord-Hollandse stoomtram van Warmenhuizen naar Schagen de Loet.",
+    "category": "organisator",
+    "image": "/images/exposanten/modelspoorclub-alkmaar/kaart.jpg"
+  },
+  {
+    "title": "Westfriese Modelspoor Club",
+    "href": "/exposanten/westfriese-modelspoorclub",
+    "scale": "H0 en N",
+    "description": "Een kinderbaan om zelf te rijden en een N-baan rond het Drielandenpunt.",
+    "category": "organisator",
+    "image": "/images/exposanten/westfriese-modelspoorclub/n-baan.jpg"
+  },
+  {
+    "title": "Treinenbeurs",
+    "href": "/exposanten/treinenbeurs",
+    "scale": "Alle schalen",
+    "description": "Langs vele kramen en verkopers: alles wat de modelspoorhobby te bieden heeft.",
+    "category": "aanwezig",
+    "image": "/images/exposanten/treinenbeurs/beurs.jpg"
+  },
+  {
+    "title": "Lokdokter",
+    "href": "/exposanten/lokdokter",
+    "scale": "Gratis advies",
+    "description": "Doet uw loc het niet meer? Neem hem mee voor een gratis inspectie en advies.",
+    "category": "aanwezig",
+    "image": "/images/exposanten/lokdokter/lokdokter.jpg"
+  },
+  {
+    "title": "Gastbanen",
+    "href": "/exposanten/gastbanen",
+    "scale": "Diverse schalen",
+    "description": "Clubs en bouwers van buiten de organisatie, op uitnodiging.",
+    "category": "aanwezig",
+    "status": "Wordt aangevuld",
+    "image": "/images/galerij/2024/20240218_103608.jpg"
+  }
+]

@@ -1,0 +1,48 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+---
+
+<Page
+  title="Westfriese Modelspoor Club"
+  hero="Westfriese Modelspoor Club"
+  kicker="Organiserende vereniging"
+  heroImage="/images/exposanten/westfriese-modelspoorclub/n-baan.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+  where="Noord-Scharwoude"
+>
+  <p class="text-lg text-gray-700">
+    De Westfriese Modelspoor Club is gehuisvest in Noord-Scharwoude en is met
+    twee verschillende banen op de Modelspoordagen aanwezig.
+  </p>
+
+  <Carousel images={carousels['westfriese-modelspoorclub']} id="westfriese-modelspoorclub" />
+
+  <h2>De kinderbaan in H0</h2>
+  <p>
+    In een groot ovaal van 3,60 bij 1,20 meter ziet u hoe eenvoudig een leuke
+    baan gebouwd kan worden. De kinderbaan wordt aangestuurd met een eenvoudige
+    digitale beginnersset van Roco. Kinderen kunnen hier hun eerste stappen
+    zetten in het digitaal besturen van een modelbaan.
+  </p>
+
+  <h2>N-baan rond het Drielandenpunt</h2>
+  <p>
+    Deze baan naar Nederlands en Duits voorbeeld heeft een landschap zoals dat
+    rond het Drielandenpunt te vinden is, in nazomerse stijl en een vrij
+    tijdvak. De baan heeft een U-vorm van 4,8 meter breed, met benen tot 2,4
+    meter. Het hoofdtraject is een dubbelsporige rondbaan met één hoofdstation,
+    en een nevenbaan loopt tussen een industrie en opstelemplacementen.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    De Westfriese Modelspoor Club<br />
+    De Mossel 23E<br />
+    1723 HX Noord-Scharwoude<br />
+    <a href="http://www.dewmc.nl/" target="_blank" rel="noopener">dewmc.nl</a> ·
+    <a href="mailto:info@dewmc.nl">info@dewmc.nl</a>
+  </p>
+</Page>

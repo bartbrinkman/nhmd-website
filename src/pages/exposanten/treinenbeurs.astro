@@ -1,0 +1,43 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+import { asset } from '../../utils';
+
+// Beurs photos from the galleries, picked by their caption.
+type Slide = { src: string; title: string; description?: string };
+const all = Object.values(carousels as Record<string, Slide[]>).flat();
+const beurs: Slide[] = [
+  { src: '/images/exposanten/treinenbeurs/beurs.jpg', title: 'Treinenbeurs' },
+  ...all.filter(i => i.title.startsWith('Treinenbeurs')),
+];
+---
+
+<Page
+  title="Treinenbeurs"
+  hero="Treinenbeurs"
+  kicker="Ook aanwezig"
+  heroImage="/images/exposanten/treinenbeurs/beurs.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+>
+  <p class="text-lg text-gray-700">
+    Langs vele kramen en verkopers kunt u zich vergapen aan alles wat de
+    modelspoorhobby te bieden heeft.
+  </p>
+
+  <Carousel images={beurs} id="treinenbeurs" />
+
+  <h2>Kopen en verkopen</h2>
+  <p>
+    Bent u op zoek naar die ene locomotief voor uw verzameling, een rijtuig om
+    een trein compleet te maken, of gebouwen en figuren voor uw eigen baan? Hier
+    zit u goed.
+  </p>
+
+  <h2>Zelf een tafel huren?</h2>
+  <p>
+    Handelaren en particulieren die iets willen verkopen, kunnen een tafel huren.
+    Zie <a href={asset('/deelnemen')}>deelnemen</a>.
+  </p>
+</Page>

@@ -1,0 +1,15 @@
+{
+  "name": "msa-admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local web UI to manage carousels.json and public/images for the NHMD website. Not part of the Astro build.",
+  "scripts": {
+    "start": "node server.js",
+    "resize": "node resize-pending.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "sharp": "^0.34.5"
+  }
+}

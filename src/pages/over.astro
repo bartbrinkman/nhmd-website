@@ -1,0 +1,50 @@
+---
+import Page from '../layouts/Page.astro';
+import exposanten from '../content/exposanten.json';
+import { asset } from '../utils';
+
+const organisatoren = exposanten.filter(e => e.category === 'organisator');
+---
+
+<Page
+  title="Over de NMD"
+  description="De Noord-Hollandse Modelspoordagen: een jaarlijks evenement van vier modelspoorclubs uit Noord-Holland."
+  hero="Over de NMD"
+  heroImage="/images/galerij/2024/20240218_100422.jpg"
+>
+  <p class="text-lg text-gray-700">
+    De Noord-Hollandse Modelspoordagen, kortweg de NMD, zijn een jaarlijks
+    terugkerend evenement over modelspoor, modeltreinen en de modelbouwhobby.
+  </p>
+
+  <h2>Vier clubs, één weekend</h2>
+  <p>
+    Het evenement wordt georganiseerd door vier modelspoorclubs uit de regio.
+    Zij komen met een variatie aan modelspoorbanen naar het OSG Willem Blaeu in
+    Alkmaar, en nodigen daarnaast gastbanen, handelaren en andere organisaties
+    uit.
+  </p>
+  <ul>
+    {organisatoren.map(o => <li><a href={asset(o.href)}>{o.title}</a></li>)}
+  </ul>
+  <p>
+    Naast de banen is er een
+    <a href={asset('/exposanten/treinenbeurs')}>grote treinenbeurs</a>, en kunt
+    u met een haperende loc terecht bij de
+    <a href={asset('/exposanten/lokdokter')}>Lokdokter</a>.
+  </p>
+
+  <h2>Een weekend opbouwen</h2>
+  <p>
+    Op de vrijdag ervoor wordt de school na schooltijd omgebouwd tot
+    tentoonstellings- en beursruimte. Banen komen in delen uit de aanhanger,
+    tafels worden verschoven en handelaren zetten hun koopwaar klaar. Hoe dat
+    eruitziet, staat in het <a href={asset('/nieuws/voorbereidingen-2025')}>nieuws</a>.
+  </p>
+
+  <h2>Vragen?</h2>
+  <p>
+    Heeft u een vraag die hier niet beantwoord wordt? Mail naar
+    <a href="mailto:info@nhmd.nl">info@nhmd.nl</a>. We staan u graag te woord.
+  </p>
+</Page>

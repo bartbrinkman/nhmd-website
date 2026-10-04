@@ -1,0 +1,236 @@
+---
+import Base from '../layouts/Base.astro';
+import BrochureStand from '../components/BrochureStand.astro';
+import Carousel from '../components/Carousel.astro';
+import events from '../content/events.json';
+import carousels from '../content/carousels.json';
+import { getCollection } from 'astro:content';
+import { asset, months, upcomingEvents, eventWhen } from '../utils';
+
+// The next edition comes from events.json, so the homepage never needs a
+// date typed into it. Times differ per day, so the hero shows the dates only.
+const editie = upcomingEvents(events).find(e => e.type === 'nmd');
+const editieWhen = editie ? eventWhen({ ...editie, startTime: undefined, endTime: undefined }) : undefined;
+
+const nieuws = (await getCollection('nieuws', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+// A taste of the most recent edition; the rest is on the galerij page.
+const [latestYear] = Object.keys(carousels).filter(k => /^\d{4}$/.test(k)).sort().reverse();
+const preview = (carousels as Record<string, { src: string; title: string; description?: string }[]>)[latestYear].slice(0, 10);
+
+// Hero slideshow. Each source is pre-cropped to a 2.4:1 band, so the markup
+// needs no per-image framing.
+const heroSlides = [
+  { src: '/images/hero/0.jpg' },
+  { src: '/images/hero/1.jpg' },
+  { src: '/images/hero/2.jpg' },
+  { src: '/images/hero/3.jpg' },
+  { src: '/images/hero/4.jpg' },
+];
+const SLIDE_SECONDS = 7;
+const LOOP_SECONDS = heroSlides.length * SLIDE_SECONDS;
+
+const highlights = [
+  {
+    title: 'Ruim 150 meter modelspoor',
+    text: 'Banen in H0, N en meer, van stoomtram tot bergbaan, gebouwd door clubs uit de regio.',
+    icon: 'M4 19h16M6 15l2-10h8l2 10M9 9h6M8 19v-4m8 4v-4',
+  },
+  {
+    title: 'Grote treinenbeurs',
+    text: 'Kramen vol locomotieven, rijtuigen, gebouwen en onderdelen. Voor die ene loc die u nog zocht.',
+    icon: 'M3 7h18l-1.5 9a2 2 0 0 1-2 1.7H6.5a2 2 0 0 1-2-1.7L3 7Zm4 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2',
+  },
+  {
+    title: 'Kinderbaan',
+    text: 'Op de kinderbaan van de Westfriese Modelspoor Club zetten kinderen hun eerste digitale stappen.',
+    icon: 'M4 17h16M6 17V9h8v8M14 12h4l2 5M8 9V6h4v3M7 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z',
+  },
+  {
+    title: 'Lokdokter',
+    text: 'Doet uw loc het niet meer? Neem hem mee voor een gratis inspectie en advies.',
+    icon: 'M12 6v12M6 12h12M4.5 4.5h15v15h-15z',
+  },
+];
+---
+
+<Base title="Home">
+  <!-- Hero -->
+  <section class="relative flex items-center overflow-hidden min-h-[clamp(340px,34vw,560px)]">
+    <div class="absolute inset-0" aria-hidden="true">
+      {heroSlides.map((slide, i) => (
+        <img
+          src={asset(slide.src)}
+          alt=""
+          loading={i === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+          class="hero-slide absolute inset-0 h-full w-full object-cover"
+          style={`animation-delay: ${i * SLIDE_SECONDS}s; animation-duration: ${LOOP_SECONDS}s;`}
+        />
+      ))}
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-dark/95 to-primary-dark/80 md:via-primary-dark/80 md:via-50% md:to-primary-dark/20"></div>
+    <div class="relative w-full text-white py-14 md:py-20">
+      <div class="relative max-w-6xl mx-auto px-4">
+        <div class="max-w-2xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-sein mb-3">Jaarlijks in Alkmaar</p>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 font-heading uppercase tracking-normal leading-[0.95]">
+            Noord-Hollandse<br />Modelspoordagen
+          </h1>
+          <p class="text-base md:text-lg text-white/85 mb-2">
+            Een weekend lang modelspoorbanen van clubs uit de regio en een grote
+            treinenbeurs. Voor liefhebbers, en voor iedereen die gewoon graag
+            treinen ziet rijden.
+          </p>
+          {editie ? (
+            <dl class="meta">
+              <div><dt>Wanneer</dt><dd>{editieWhen}</dd></div>
+              <div><dt>Waar</dt><dd>OSG Willem Blaeu, Alkmaar</dd></div>
+              <div><dt>Toegang</dt><dd>€ 5, kinderen onder 12 gratis</dd></div>
+            </dl>
+          ) : (
+            <p class="mt-6 mb-8 text-white/80">De datum van de volgende editie maken we hier zo snel mogelijk bekend.</p>
+          )}
+          <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href={asset('/bezoek')} class="text-center bg-sein text-primary-dark px-6 py-3 rounded-lg font-bold shadow-md hover:bg-white transition-colors">
+              Bezoekersinformatie
+            </a>
+            <a href={asset('/exposanten')} class="text-center border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors">
+              Wat is er te zien
+            </a>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <BrochureStand
+            float
+            items={[{ src: '/images/brochure/nmd-dagen-2027.jpg', alt: 'Poster van de Noord-Hollandse Modelspoordagen' }]}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* Ken Burns: each slide holds for SLIDE_SECONDS while zooming slowly, then
+       crossfades into the next. Five slides at 7s = a 35s loop, so each slide
+       owns 20% of the timeline. */
+    .hero-slide {
+      opacity: 0;
+      transform: scale(1.04);
+      animation-name: hero-kenburns;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes hero-kenburns {
+      0%      { opacity: 0; transform: scale(1.04); }
+      3%      { opacity: 1; }
+      20%     { opacity: 1; }
+      23%     { opacity: 0; transform: scale(1.15); }
+      23.01%  { transform: scale(1.04); }
+      100%    { opacity: 0; transform: scale(1.04); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-slide { animation: none; transform: none; opacity: 0; }
+      .hero-slide:first-child { opacity: 1; }
+    }
+  </style>
+
+  <!-- Sections below the hero alternate the gray page ground and white
+       (bg-white + hairline borders), so neighbouring sections never merge.
+       Keep the order gray, white, gray, white when adding or removing one. -->
+
+  <!-- Wat is er te zien (gray) -->
+  <section class="py-12 md:py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal mb-8">Wat is er te zien</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {highlights.map(h => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-sein mb-4" aria-hidden="true">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={h.icon} /></svg>
+            </span>
+            <h3 class="font-heading font-bold uppercase text-primary text-lg leading-tight mb-2">{h.title}</h3>
+            <p class="text-sm text-gray-600">{h.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Praktisch (white) -->
+  <section class="py-12 md:py-16 bg-white border-y border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-2 md:items-center">
+      <div>
+        <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal mb-6">Praktisch</h2>
+        <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 text-gray-700">
+          <dt class="font-semibold text-primary">Open</dt>
+          <dd>Zaterdag 10:00–16:00, zondag 10:00–15:00</dd>
+          <dt class="font-semibold text-primary">Toegang</dt>
+          <dd>€ 5, pinnen kan. Kinderen onder 12 jaar onder begeleiding gratis.</dd>
+          <dt class="font-semibold text-primary">Adres</dt>
+          <dd>OSG Willem Blaeu, Robonsbosweg 11, Alkmaar</dd>
+          <dt class="font-semibold text-primary">Parkeren</dt>
+          <dd>Gratis op P+R Bergerweg, op loopafstand</dd>
+          <dt class="font-semibold text-primary">Bus</dt>
+          <dd>Lijn 166 vanaf station Alkmaar, halte Hogeschool Alkmaar</dd>
+        </dl>
+        <a href={asset('/bezoek')} class="btn mt-6">Route en parkeren</a>
+      </div>
+      <img
+        src={asset('/images/exposanten/treinenbeurs/beurs.jpg')}
+        alt="Bezoekers op de treinenbeurs"
+        loading="lazy"
+        decoding="async"
+        class="w-full aspect-[4/3] object-cover rounded-xl shadow-sm"
+      />
+    </div>
+  </section>
+
+  <!-- Nieuws (gray) -->
+  {nieuws.length > 0 && (
+    <section class="py-12 md:py-16">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-baseline justify-between mb-8 flex-wrap gap-2">
+          <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal">Nieuws</h2>
+          <a href={asset('/nieuws')} class="btn">Alle berichten</a>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {nieuws.map((item) => {
+            const d = item.data.date;
+            return (
+              <a href={asset(`/nieuws/${item.id}`)} class="group card card-hover bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:border-primary/30">
+                {item.data.image && (
+                  <img src={asset(item.data.image)} alt="" loading="lazy" decoding="async" class="h-44 w-full object-cover object-top" />
+                )}
+                <div class="card__body p-6">
+                  <time datetime={d.toISOString().slice(0, 10)} class="text-xs uppercase tracking-wide text-gray-500">
+                    {d.getDate()} {months[d.getMonth()]} {d.getFullYear()}
+                  </time>
+                  <h3 class="mt-1 font-semibold text-primary group-hover:text-primary-light transition-colors">{item.data.title}</h3>
+                  <p class="mt-2 mb-4 text-sm text-gray-600">{item.data.summary}</p>
+                  <span class="btn">Lees meer</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Galerij (white) -->
+  <section class="py-12 md:py-16 bg-white border-t border-gray-200">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-baseline justify-between mb-8 flex-wrap gap-2">
+        <h2 class="section-title text-2xl md:text-3xl font-bold text-primary font-heading uppercase tracking-normal">Vorige editie</h2>
+        <a href={asset('/galerij')} class="btn">Naar de galerij</a>
+      </div>
+      <Carousel images={preview} id="home-galerij" />
+    </div>
+  </section>
+</Base>

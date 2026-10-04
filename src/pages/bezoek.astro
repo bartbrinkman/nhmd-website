@@ -1,0 +1,77 @@
+---
+import Page from '../layouts/Page.astro';
+import { asset } from '../utils';
+
+const maps = 'https://www.google.com/maps/search/?api=1&query=Robonsbosweg+11+1816+MK+Alkmaar';
+---
+
+<Page
+  title="Bezoekersinformatie"
+  description="Openingstijden, entree, route en parkeren voor de Noord-Hollandse Modelspoordagen in het OSG Willem Blaeu in Alkmaar."
+  hero="Bezoek"
+  kicker="Bezoekersinformatie"
+  heroImage="/images/galerij/2025/20250215_113125-0.jpg"
+  where="OSG Willem Blaeu, Alkmaar"
+  brochure="/images/brochure/nmd-dagen-2027.jpg"
+  brochureAlt="Poster van de Noord-Hollandse Modelspoordagen"
+>
+  <h2>Openingstijden</h2>
+  <table>
+    <tbody>
+      <tr><th>Zaterdag</th><td>10:00 tot 16:00</td></tr>
+      <tr><th>Zondag</th><td>10:00 tot 15:00</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Entree</h2>
+  <table>
+    <tbody>
+      <tr><th>Volwassenen</th><td>€ 5,00</td></tr>
+      <tr><th>Kinderen onder 12 jaar</th><td>Gratis, onder begeleiding van een volwassene</td></tr>
+    </tbody>
+  </table>
+  <p>U kunt aan de kassa pinnen.</p>
+
+  <h2>Adres</h2>
+  <p>
+    <strong>OSG Willem Blaeu</strong><br />
+    Robonsbosweg 11<br />
+    1816 MK Alkmaar
+  </p>
+  <p><a href={maps} target="_blank" rel="noopener">Bekijk op de kaart</a></p>
+
+  <h2>Met de auto</h2>
+  <p>
+    Rondom de school is weinig parkeerruimte. U kunt <strong>gratis parkeren op
+    P+R Bergerweg</strong>. Daar is voldoende plaats, en de ingang is op minder
+    dan vijf minuten lopen.
+  </p>
+  <p>
+    Ook op industrieterrein West Vleugel, bij de gemeente Bergen, is ruim
+    parkeergelegenheid. Rijd op de Bergerweg richting Bergen en sla rechtsaf de
+    Jan Lighthartstraat in. Het parkeerterrein ligt aan uw rechterhand.
+  </p>
+
+  <div class="not-prose grid gap-4 sm:grid-cols-2 my-6">
+    <figure>
+      <img src={asset('/images/bezoek/p-r-bergerweg.jpg')} alt="P+R-terrein Bergerweg" loading="lazy" class="w-full aspect-video object-cover rounded-lg" />
+      <figcaption class="mt-2 text-sm text-gray-500">P+R-terrein Bergerweg</figcaption>
+    </figure>
+    <figure>
+      <img src={asset('/images/bezoek/parkeren-gemeente-bergen.jpg')} alt="Parkeerterrein bij de gemeente Bergen" loading="lazy" class="w-full aspect-video object-cover rounded-lg" />
+      <figcaption class="mt-2 text-sm text-gray-500">Parkeerterrein gemeente Bergen</figcaption>
+    </figure>
+  </div>
+
+  <h2>Met het openbaar vervoer</h2>
+  <p>
+    Vanaf station Alkmaar neemt u <strong>buslijn 166</strong> richting Bergen
+    Plein. Stap uit bij de halte Hogeschool Alkmaar; vandaar is het minder dan
+    vijf minuten lopen.
+  </p>
+
+  <h2>Nieuw in de hobby?</h2>
+  <p>
+    Geen voorkennis nodig: de bouwers vertellen graag over hun banen.
+  </p>
+</Page>

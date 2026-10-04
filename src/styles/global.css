@@ -1,0 +1,538 @@
+@import "tailwindcss";
+
+@theme {
+  /* Taken from the event poster: the green of the title, the NS-yellow of the
+     date band, the signal red of the lettering. Green is darkened from the
+     poster's so white text on it passes contrast. */
+  --color-primary: #0b6623;
+  --color-primary-dark: #053d14;
+  --color-primary-light: #2e8a45;
+  --color-accent: #d7141a;
+  --color-warm: #f5f6f0;
+  --color-warm-dark: #dfe3d4;
+  /* NS-yellow. The one interactive highlight: focus ring, underlines, the
+     single call to action per dark section. */
+  --color-sein: #ffc917;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Exo 2', system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Page-wide
+   --------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Light ground, so white cards read as cards instead of vanishing. */
+body {
+  background: var(--color-warm);
+}
+
+/* One focus ring everywhere, only for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--color-sein);
+  outline-offset: 2px;
+}
+
+/* Section heading with a short yellow rule beneath it. */
+.section-title {
+  position: relative;
+  padding-bottom: 0.625rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--color-sein);
+}
+
+/* Lift-on-hover for any card that links somewhere. */
+.card-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+@media (hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -14px rgba(6, 50, 18, 0.35), 0 2px 6px rgba(6, 50, 18, 0.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .card-hover { transition: none; }
+  .card-hover:hover { transform: none; }
+}
+
+/* Desktop nav link: yellow underline marks the current section. */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.25rem;
+  height: 2px;
+  border-radius: 9999px;
+  background: var(--color-sein);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-link--active::after {
+  transform: scaleX(1);
+}
+
+/* Mobile menu slides open rather than popping. */
+#mobile-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+#mobile-menu > div {
+  overflow: hidden;
+}
+
+#mobile-menu.is-open {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #mobile-menu { transition: none; }
+}
+
+/* Markdown content styling */
+.prose h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: normal;
+  color: var(--color-primary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-warm-dark);
+}
+
+.prose h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary-light);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-bottom: 0.25rem;
+  line-height: 1.75;
+}
+
+.prose a {
+  color: var(--color-primary-light);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.prose a:hover {
+  color: var(--color-accent);
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+/* A block of component markup (cards, buttons) inside article copy: switch
+   the prose typography off so the block's own classes apply. */
+.prose .not-prose h2,
+.prose .not-prose h3 {
+  margin: 0;
+  border: 0;
+}
+
+.prose .not-prose a:not(.btn) {
+  color: inherit;
+  font-weight: inherit;
+}
+
+/* .btn inside article copy keeps its own colours over the .prose link rules. */
+.prose .btn {
+  color: var(--color-primary);
+}
+
+.prose .btn:hover {
+  color: #fff;
+}
+
+/* Gallery tiles butt up against each other; the grid owns the spacing and the
+   outer radius, not the individual photos. */
+.prose .carousel img {
+  border-radius: 0;
+  margin: 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose th,
+.prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-warm-dark);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--color-warm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+
+
+/* ---------------------------------------------------------------------------
+   Interactive accents
+
+   The yellow below is declared here and nowhere else. Templates carry semantic
+   classes; no colour utility for it appears in any .astro file.
+   --------------------------------------------------------------------------- */
+
+/* Call-to-action at the end of a card and in section headers. A button rather
+   than a text link, so the affordance reads without an underline. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  color: var(--color-primary);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.group:hover .btn,
+.btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Frequency label on an activity card. One colour for all of them: the label
+   says how often something happens, not what kind of thing it is, so varying
+   the colour per card implied a distinction that does not exist. */
+.tag {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+  color: var(--color-primary);
+}
+
+/* The one call to action per dark section that should carry weight: faint
+   white at rest, yellow on hover. */
+.btn-sein {
+  border: 1px solid transparent;
+}
+
+/* Same control on a green panel, matching the hero's outline buttons: no fill,
+   hairline border, filling faintly on hover. */
+.btn-on-dark {
+  background: transparent;
+  border: 1px solid color-mix(in oklab, #fff 30%, transparent);
+  color: #fff;
+}
+
+.group:hover .btn-on-dark,
+.btn-on-dark:hover {
+  background: color-mix(in oklab, #fff 12%, transparent);
+  color: #fff;
+}
+
+/* Cards stretch to the row height, and the button sits on the bottom edge so
+   the buttons line up across a row regardless of how long the copy runs.
+   margin-top:auto only absorbs *spare* space, so the copy above the button
+   carries its own bottom margin to guarantee clearance on a full card. */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.card__body .btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Baan card on the green panel. The title stays white throughout: the yellow is
+   reserved for the section's single call to action. */
+.card-on-dark__title {
+  color: #fff;
+}
+
+.btn-sein {
+  background: color-mix(in oklab, #fff 15%, transparent);
+  color: #fff;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.group:hover .btn-sein,
+.btn-sein:hover {
+  background: var(--color-sein);
+  border-color: var(--color-sein);
+  color: var(--color-primary-dark);
+}
+
+/* Key/value pairs under a page hero (Wanneer / Waar). The label sits above its
+   value in small caps, each pair marked off by a hairline rule. */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.5rem;
+  margin: 1.5rem 0 0;
+}
+
+.meta > div {
+  padding-left: 0.875rem;
+  border-left: 2px solid color-mix(in oklab, #fff 35%, transparent);
+}
+
+.meta dt {
+  font-family: var(--font-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, #fff 70%, transparent);
+}
+
+.meta dd {
+  margin: 0.125rem 0 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------------
+   Brochure standee
+
+   Event posters are tall A-format sheets, an awkward shape for a wide hero.
+   Each sits tilted on its stand; with two, they overlap in a fan and trade
+   places on a slow loop so neither is permanently buried. Clicking opens the
+   poster full size.
+
+   The swap lives on .standee__slot and the hover lift on .standee__paper --
+   two elements, so the animated transform and the hover transform compose
+   instead of one overriding the other.
+   --------------------------------------------------------------------------- */
+.standee {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  margin: 0;
+  perspective: 1400px;
+  align-self: center;
+  display: flex;
+}
+
+.standee__slot {
+  display: block;
+  width: 8rem;
+  transform-origin: 50% 60%;
+  transform: rotateX(7deg) rotateZ(-6deg);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 768px) {
+  .standee__slot { width: 9rem; }
+}
+
+.standee__slot + .standee__slot {
+  margin-left: -3.75rem;
+  z-index: 2;
+  transform: rotateX(7deg) rotateZ(4.5deg);
+}
+
+/* Floated: taken out of flow so the sheets overhang the section rather than
+   stretching it, and centred on the section's own height. Only from md up --
+   on a narrow screen they sit below the copy instead of over it. */
+@media (min-width: 768px) {
+  .standee--float {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+  }
+}
+
+/* The stacking order is fixed: the second sheet is always on top. To see the
+   one behind it, the top sheet slides aside -- mostly a sideways nudge, with
+   just enough extra tilt to read as a sheet being moved rather than sliding on
+   rails. Nothing changes places, so nothing has to pass through anything.
+
+   The hovered sheet itself never moves: sliding it out from under the pointer
+   would drop the hover and flicker. */
+.standee__slot:first-child:hover ~ .standee__slot,
+.standee__slot:first-child:focus-within ~ .standee__slot {
+  transform: rotateX(7deg) rotateZ(8deg) translate(3rem, 0.5rem);
+}
+
+.standee__paper {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  cursor: zoom-in;
+  background: none;
+  border-radius: 3px;
+  transition: transform 220ms ease, box-shadow 260ms ease;
+}
+
+.standee__paper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    0 14px 20px -12px rgba(0, 0, 0, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 260ms ease;
+}
+
+/* Hover lifts the sheet without resizing it, so the hero never shifts. */
+.standee__paper:hover,
+.standee__paper:focus-visible {
+  transform: translateY(-0.5rem);
+  outline: none;
+}
+
+.standee__paper:hover img,
+.standee__paper:focus-visible img {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 34px 42px -16px rgba(0, 0, 0, 0.85),
+    0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Zoom cue, fading in over the sheet on hover. */
+.standee__zoom {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.standee__zoom svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #fff;
+  /* Legible over whatever part of the poster sits behind it, without tinting
+     the artwork. */
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 6px rgba(0, 0, 0, 0.7));
+}
+
+.standee__paper:hover .standee__zoom,
+.standee__paper:focus-visible .standee__zoom {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .standee__slot { transition: none; }
+  .standee__paper { transition: none; }
+  .standee__paper:hover,
+  .standee__paper:focus-visible { transform: none; }
+  .standee__zoom { transition: none; }
+}
+
+/* Enlarged view */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: rgba(2, 20, 7, 0.94);
+  cursor: zoom-out;
+}
+
+.lightbox[hidden] { display: none; }
+
+.lightbox__img {
+  max-width: min(100%, 46rem);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9);
+  cursor: default;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.lightbox__close:hover { background: rgba(255, 255, 255, 0.3); }
+

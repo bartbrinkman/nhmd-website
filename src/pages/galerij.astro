@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Carousel from '../components/Carousel.astro';
+import carousels from '../content/carousels.json';
+import { asset } from '../utils';
+
+// One gallery per edition: every carousels.json key that is a year, newest
+// first. Adding next year's photos is a new key, nothing else.
+type Slide = { src: string; title: string; description?: string };
+const edities = Object.entries(carousels as Record<string, Slide[]>)
+  .filter(([key]) => /^\d{4}$/.test(key))
+  .sort(([a], [b]) => b.localeCompare(a));
+---
+
+<Base title="Galerij" description="Foto's van eerdere edities van de Noord-Hollandse Modelspoordagen.">
+  <div class="bg-gradient-to-r from-primary-dark to-primary text-white py-12">
+    <div class="max-w-6xl mx-auto px-4">
+      <h1 class="text-3xl md:text-5xl font-bold font-heading uppercase tracking-normal leading-tight">Galerij</h1>
+      <p class="mt-3 text-white/80 max-w-2xl">
+        Een indruk van eerdere edities. Klik op een foto om hem groot te bekijken.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-2" aria-label="Edities">
+        {edities.map(([jaar]) => (
+          <a href={`#editie-${jaar}`} class="rounded-md bg-white/10 px-3 py-1.5 text-sm font-semibold text-white/90 hover:bg-white/20 hover:text-white transition-colors">{jaar}</a>
+        ))}
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-12">
+    {edities.map(([jaar, images]) => (
+      <section id={`editie-${jaar}`} class="scroll-mt-6">
+        <div class="flex items-baseline justify-between mb-6 flex-wrap gap-2">
+          <h2 class="section-title text-xl md:text-2xl font-bold font-heading uppercase text-primary">Modelspoordagen {jaar}</h2>
+          <span class="text-sm text-gray-500">{images.length} foto's</span>
+        </div>
+        <Carousel images={images} id={`galerij-${jaar}`} />
+      </section>
+    ))}
+
+    <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
+      <h2 class="font-heading uppercase text-lg font-bold text-primary mb-2">Liever bewegend beeld?</h2>
+      <p class="text-gray-700">
+        Bij de <a href={asset('/nieuws/terugblik-2025')} class="text-primary-light font-semibold">terugblik op 2025</a>
+        staan een korte samenvatting en een uitgebreide video van alle banen.
+      </p>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,57 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+---
+
+<Page
+  title='AMG "Het Waeghspoor"'
+  hero='AMG "Het Waeghspoor"'
+  kicker="Organiserende vereniging"
+  heroImage="/images/exposanten/waeghspoor/nmd-2025.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+  where="Alkmaar"
+>
+  <p class="text-lg text-gray-700">
+    De Alkmaarse Module Groep "Het Waeghspoor" houdt zich bezig met het
+    beoefenen en promoten van de modelspoorhobby.
+  </p>
+
+  <Carousel images={carousels.waeghspoor} id="waeghspoor" />
+
+  <h2>De banen</h2>
+  <p>De groep beschikt over de volgende modulebanen:</p>
+  <ul>
+    <li>Een grote H0-modulebaan (2-rail) met meer dan 20 modules</li>
+    <li>Een redelijk grote N-modulebaan</li>
+    <li>Een H0-modulebaan (3-rail) met 10 modules</li>
+    <li>Twee royale H0-demonstratiebanen (2-rail en 3-rail), waarmee het programma Koploper en zijn mogelijkheden worden gedemonstreerd</li>
+  </ul>
+  <p>
+    Alle banen zijn digitaal en worden aangestuurd met Koploper. Meestal worden
+    één of meer banen, of delen daarvan, opgesteld tijdens manifestaties en
+    evenementen in de regio, of daarbuiten op uitnodiging.
+  </p>
+
+  <h2>De club</h2>
+  <p>
+    Sinds 2012 heeft de groep een clubruimte in het Olympiagebouw in Alkmaar.
+    De leden komen daar iedere vrijdagavond bij elkaar om aan de modules te
+    werken, ideeën uit te wisselen en bij te praten. Leden en donateurs
+    ontvangen het clubblad "De Drijfstang".
+  </p>
+  <p>
+    Spreekt dit u aan? U bent van harte welkom bij een gezellige
+    modelspoorclub waar niets moet, maar bijna alles mag.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Olympiagebouw<br />
+    Olympiaweg 17<br />
+    1816 MJ Alkmaar<br />
+    <a href="https://www.hetwaeghspoor.nl" target="_blank" rel="noopener">hetwaeghspoor.nl</a> ·
+    <a href="mailto:info@hetwaeghspoor.nl">info@hetwaeghspoor.nl</a>
+  </p>
+</Page>

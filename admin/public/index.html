@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Admin</h1>
+      <nav class="tabs">
+        <button class="tab active" data-tab="carousels">Carousels</button>
+        <button class="tab" data-tab="exposanten">Exposanten</button>
+        <button class="tab" data-tab="events">Edities</button>
+      </nav>
+    </div>
+    <div id="status" class="status"></div>
+  </header>
+
+  <!-- Carousels tab -->
+  <main id="tab-carousels" class="tab-body">
+    <aside class="sidebar">
+      <section>
+        <h2>Carousels</h2>
+        <ul id="carousel-list"></ul>
+        <form id="new-carousel-form" class="inline-form">
+          <input type="text" id="new-carousel-id" placeholder="new-carousel-id" pattern="[a-z0-9_-]+" required />
+          <button type="submit">Add</button>
+        </form>
+      </section>
+    </aside>
+
+    <section class="editor" id="editor-pane">
+      <div id="editor-empty" class="empty">Select a carousel on the left.</div>
+      <div id="editor" hidden>
+        <div class="editor-header">
+          <div>
+            <h2 id="editor-title"></h2>
+            <p id="editor-subtitle" class="hint"></p>
+          </div>
+          <div class="editor-actions">
+            <button id="save-btn" class="primary">Save</button>
+          </div>
+        </div>
+        <ol id="slides"></ol>
+        <div id="slides-hint" class="hint" hidden>Drag images from the Pending tray →</div>
+      </div>
+    </section>
+
+    <aside class="pending-rail" id="pending-rail">
+      <header>
+        <h2>Pending <span id="pending-count" class="count"></span></h2>
+      </header>
+      <p class="hint">Drag onto a carousel row to add, or drag a slide here to remove. Run <code>npm run resize</code> to shrink these to 2000px max.</p>
+      <div id="pending-grid" class="pending-grid"></div>
+    </aside>
+  </main>
+
+  <!-- Exposanten tab -->
+  <main id="tab-exposanten" class="tab-body single-pane" hidden>
+    <section class="editor">
+      <div class="editor-header">
+        <div>
+          <h2>Exposanten</h2>
+          <p class="hint">Cards used on the homepage and <code>/exposanten</code> overview. Saved to <code>src/content/exposanten.json</code>.</p>
+        </div>
+        <div class="editor-actions">
+          <button id="exposanten-save" class="primary">Save</button>
+        </div>
+      </div>
+      <div id="exposanten-list" class="row-list"></div>
+      <button id="exposanten-add" class="add-row">+ Add exposant</button>
+    </section>
+  </main>
+
+  <!-- Events tab -->
+  <main id="tab-events" class="tab-body single-pane" hidden>
+    <section class="editor">
+      <div class="editor-header">
+        <div>
+          <h2>Edities</h2>
+          <p class="hint">Editions of the Modelspoordagen; the next one drives the homepage and Bezoek page. Saved to <code>src/content/events.json</code>.</p>
+        </div>
+        <div class="editor-actions">
+          <button id="events-save" class="primary">Save</button>
+        </div>
+      </div>
+      <div id="events-list" class="row-list"></div>
+      <button id="events-add" class="add-row">+ Add event</button>
+    </section>
+  </main>
+
+  <div id="lightbox" class="lightbox" hidden><img alt="" /></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

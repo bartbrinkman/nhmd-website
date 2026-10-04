@@ -1,0 +1,37 @@
+---
+import Page from '../layouts/Page.astro';
+import { asset } from '../utils';
+---
+
+<Page
+  title="Deelnemen"
+  description="Exposeren met uw baan of een tafel huren op de treinenbeurs van de Noord-Hollandse Modelspoordagen."
+  hero="Deelnemen"
+  kicker="Voor exposanten en handelaren"
+  heroImage="/images/nieuws/voorbereidingen-2025/afbeelding-4.jpg"
+>
+  <p class="text-lg text-gray-700">
+    Heeft u interesse om deel te nemen aan de Noord-Hollandse
+    Modelspoordagen? Er zijn twee manieren.
+  </p>
+
+  <h2>Uw baan tonen</h2>
+  <p>
+    Naast de banen van de vier organiserende clubs nodigen we elk jaar
+    <a href={asset('/exposanten/gastbanen')}>gastbanen</a> uit. Heeft u als club
+    of als bouwer een baan die het publiek moet zien? Laat het ons weten.
+  </p>
+
+  <h2>Een tafel huren</h2>
+  <p>
+    Op de <a href={asset('/exposanten/treinenbeurs')}>treinenbeurs</a> zijn
+    tafels te huur voor handelaren en particulieren die modelspoormateriaal
+    willen verkopen.
+  </p>
+
+  <h2>Aanmelden</h2>
+  <p>
+    Voor vragen, informatie over verkoop en tafelverhuur, of om u aan te
+    melden: mail naar <a href="mailto:info@nhmd.nl">info@nhmd.nl</a>.
+  </p>
+</Page>

@@ -1,0 +1,61 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+import { getCollection } from 'astro:content';
+import { asset, months } from '../../utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('nieuws', ({ data }) => !data.draft);
+  return entries.map(entry => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data.date;
+
+// Root-relative links in the markdown get the site base, as asset() does in
+// templates.
+const html = (entry.rendered?.html ?? '').replace(/href="\//g, `href="${asset('/')}`);
+
+const gallery = entry.data.gallery
+  ? (carousels as Record<string, { src: string; title: string; description?: string }[]>)[entry.data.gallery]
+  : undefined;
+---
+
+<Page
+  title={entry.data.title}
+  description={entry.data.summary}
+  hero={entry.data.title}
+  kicker={`${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`}
+  backHref="/nieuws"
+  backLabel="Nieuws"
+>
+  <Fragment set:html={html} />
+
+  {entry.data.videos.map(v => (
+    <div class="not-prose my-8">
+      <div class="relative aspect-video overflow-hidden rounded-lg bg-black">
+        <iframe
+          class="absolute inset-0 h-full w-full"
+          src={`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&modestbranding=1`}
+          title={v.title}
+          loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="mt-2 text-sm text-gray-500">{v.title}</p>
+    </div>
+  ))}
+
+  {gallery && (
+    <>
+      <h2>Foto's</h2>
+      <Carousel images={gallery} id={`nieuws-${entry.id}`} />
+    </>
+  )}
+
+  {!gallery && entry.data.image && (
+    <img src={asset(entry.data.image)} alt="" loading="lazy" class="w-full max-w-md" />
+  )}
+</Page>

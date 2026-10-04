@@ -1,0 +1,75 @@
+---
+interface Props {
+  title: string;
+  href: string;
+  scale: string;
+  description: string;
+  status?: string;
+  image?: string;
+  /** Card sits on a dark panel (the homepage exposanten section). */
+  dark?: boolean;
+}
+
+import { asset } from '../utils';
+const { title, href, scale, description, status, image, dark = false } = Astro.props;
+---
+
+<a
+  href={asset(href)}
+  class:list={[
+    'group card card-hover rounded-xl overflow-hidden border',
+    dark
+      ? 'card-on-dark bg-white/5 border-white/15 hover:bg-white/10 hover:border-white/35'
+      : 'bg-white border-gray-200 shadow-sm hover:border-primary/30',
+  ]}
+>
+  <div
+    class:list={[
+      'relative aspect-[16/10] overflow-hidden',
+      !image && 'flex items-center justify-center',
+      !image && (dark ? 'bg-white/5 text-white/35' : 'bg-warm text-primary/35'),
+    ]}
+  >
+    {image ? (
+      <img
+        src={asset(image)}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    ) : (
+      <span class="text-xs uppercase tracking-widest">Nog geen foto</span>
+    )}
+
+    {/* Status top left, scale top right, in the same place on every card
+        whether or not there is a photo behind them. */}
+    {status && (
+      <span
+        class:list={[
+          'absolute top-2 left-2 rounded px-2 py-1 text-xs font-medium backdrop-blur-sm',
+          dark ? 'bg-amber-300/25 text-amber-100' : 'bg-amber-100/90 text-amber-900',
+        ]}
+      >{status}</span>
+    )}
+    <span
+      class:list={[
+        'absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium backdrop-blur-sm',
+        dark ? 'bg-primary-dark/80 text-white' : 'bg-white/85 text-primary',
+      ]}
+    >{scale}</span>
+  </div>
+
+  <div class="card__body p-6">
+    <h3
+      class:list={[
+        'text-lg font-semibold mb-2',
+        dark ? 'card-on-dark__title' : 'text-primary transition-colors group-hover:text-primary-light',
+      ]}
+    >{title}</h3>
+    <p class:list={['text-sm mb-4', dark ? 'text-white/70' : 'text-gray-600']}>{description}</p>
+    <div class:list={['btn', dark && 'btn-on-dark']}>
+      Meer lezen
+    </div>
+  </div>
+</a>

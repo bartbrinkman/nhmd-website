@@ -1,0 +1,45 @@
+---
+import Page from '../../layouts/Page.astro';
+import Carousel from '../../components/Carousel.astro';
+import carousels from '../../content/carousels.json';
+---
+
+<Page
+  title="Modelspoorclub Alkmaar"
+  hero="Modelspoorclub Alkmaar"
+  kicker="Organiserende vereniging"
+  heroImage="/images/exposanten/modelspoorclub-alkmaar/20230226_134306.jpg"
+  backHref="/exposanten"
+  backLabel="Exposanten"
+  where="Alkmaar"
+>
+  <p class="text-lg text-gray-700">
+    Op de Modelspoordagen staat de Modelspoorclub Alkmaar (MSA) met het
+    Zijperspoor: de stoomtram van Warmenhuizen naar Schagen de Loet.
+  </p>
+
+  <Carousel images={carousels['modelspoorclub-alkmaar']} id="modelspoorclub-alkmaar" />
+
+  <h2>De modulebaan</h2>
+  <p>
+    De modulebaan van de MSA volgt de stoomtramlijnen van Noord-Holland. Naast
+    Warmenhuizen – Schagen de Loet bestaat hij uit de delen Bergen – Bergen aan
+    Zee en Medemblik – Opperdoes. De Bergenbaan is in groot onderhoud; daarom
+    komt de club met het Zijperspoor naar de beurs.
+  </p>
+
+  <h2>De club</h2>
+  <p>
+    De MSA is opgericht in 1984. Naast de modulebaan heeft de club een aantal
+    vaste banen in het clubgebouw: de Alkmaarbaan, de Märklinbaan, de
+    Hoogovenbaan en de N-baan.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Modelspoorclub Alkmaar<br />
+    Koornlaan 23<br />
+    1815 GE Alkmaar<br />
+    <a href="https://www.modelspoorclubalkmaar.nl/" target="_blank" rel="noopener">modelspoorclubalkmaar.nl</a>
+  </p>
+</Page>

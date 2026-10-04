@@ -1,0 +1,73 @@
+---
+// One or more event posters shown as sheets on a desk stand. With several, they
+// overlap in a fan and hovering brings one forward. Clicking opens it full size.
+import { asset } from '../utils';
+
+interface Brochure {
+  src: string;
+  alt?: string;
+}
+
+interface Props {
+  items: Brochure[];
+  /** Lift the sheets out of flow so they overhang the section instead of
+      stretching it. Needs a positioned ancestor. */
+  float?: boolean;
+}
+
+const { items, float = false } = Astro.props;
+---
+
+{items.length > 0 && (
+  <div class:list={['standee', float && 'standee--float']}>
+    {items.map((item) => (
+      <span class="standee__slot">
+        <button
+          type="button"
+          class="standee__paper"
+          data-brochure={asset(item.src)}
+          aria-label={item.alt ? `Vergroot: ${item.alt}` : 'Vergroot de poster'}
+        >
+          <img src={asset(item.src)} alt={item.alt ?? ''} loading="lazy" decoding="async" />
+          <span class="standee__zoom" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path stroke-linecap="round" d="M20 20l-3.5-3.5M11 8v6M8 11h6" />
+            </svg>
+          </span>
+        </button>
+      </span>
+    ))}
+  </div>
+
+  <div class="lightbox" hidden>
+    <button type="button" class="lightbox__close" aria-label="Sluiten">&times;</button>
+    <img class="lightbox__img" src="" alt="" />
+  </div>
+)}
+
+<script>
+  const box = document.querySelector('.lightbox') as HTMLElement | null;
+  const openers = document.querySelectorAll<HTMLButtonElement>('.standee__paper');
+  if (box && openers.length) {
+    const img = box.querySelector('.lightbox__img') as HTMLImageElement;
+    let last: HTMLButtonElement | null = null;
+    const close = () => {
+      box.hidden = true;
+      document.body.style.overflow = '';
+      last?.focus();
+    };
+    openers.forEach((opener) => {
+      opener.addEventListener('click', () => {
+        last = opener;
+        img.src = opener.dataset.brochure || '';
+        img.alt = (opener.querySelector('img') as HTMLImageElement)?.alt || '';
+        box.hidden = false;
+        document.body.style.overflow = 'hidden';
+        (box.querySelector('.lightbox__close') as HTMLButtonElement).focus();
+      });
+    });
+    box.addEventListener('click', (e) => { if (e.target !== img) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close(); });
+  }
+</script>

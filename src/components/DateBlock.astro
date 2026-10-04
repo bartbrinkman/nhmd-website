@@ -1,0 +1,51 @@
+---
+// Tear-off calendar tile used for every event date, so a date reads as a date
+// at a glance instead of as another line of text.
+import { months, monthsShort, daysShort, type EventItem } from '../utils';
+
+interface Props {
+  date: string;
+  endDate?: string;
+  /** Month reads best standalone; use the weekday where the month is already
+      shown nearby. */
+  header?: 'month' | 'weekday';
+}
+
+const { date, endDate, header = 'month' } = Astro.props;
+
+const start = new Date(date);
+const end = endDate ? new Date(endDate) : null;
+const isRange = !!end && end.getTime() !== start.getTime();
+
+const monthHeader = isRange && end!.getMonth() !== start.getMonth()
+  ? `${monthsShort[start.getMonth()]}–${monthsShort[end!.getMonth()]}`
+  : monthsShort[start.getMonth()];
+
+const weekdayHeader = isRange
+  ? `${daysShort[start.getDay()]}–${daysShort[end!.getDay()]}`
+  : daysShort[start.getDay()];
+
+const headerLabel = header === 'weekday' ? weekdayHeader : monthHeader;
+const dayLabel = isRange ? `${start.getDate()}–${end!.getDate()}` : String(start.getDate());
+
+const fullDate = `${start.getDate()} ${months[start.getMonth()]}`
+  + (isRange ? ` tot ${end!.getDate()} ${months[end!.getMonth()]}` : '');
+---
+
+<time
+  datetime={date}
+  title={fullDate}
+  class="shrink-0 self-start w-16 overflow-hidden rounded-md border border-primary/25 bg-white shadow-sm"
+>
+  <span class="block bg-primary py-1 text-center text-[11px] font-semibold uppercase tracking-wider text-white">
+    {headerLabel}
+  </span>
+  <span
+    class:list={[
+      'block py-1.5 text-center font-bold leading-none text-primary tabular-nums',
+      isRange ? 'text-lg' : 'text-2xl',
+    ]}
+  >
+    {dayLabel}
+  </span>
+</time>
